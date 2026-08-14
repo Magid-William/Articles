@@ -244,6 +244,11 @@ By "it" i mean the coding agent of course 🤖🐋.
 
 </details>
 
+# Step 5: use it
+
+<img width="1600" height="1124" alt="image" src="https://github.com/user-attachments/assets/405c1641-c9d2-41ea-a336-00711cb01071" />
+
+I found a random screw driver cap to work great as a "rim cap", i used baking powder and super glue to fill the gap and be able to attach it to the TrackPoint, no cracks so far, it turned out fine.
 
 # Other resources and Special thanks
 
