@@ -20,7 +20,7 @@ Using the ATtiny85 this is the wiring:
 | ----------------------- | -------- | ----------------------------------------------------------------- |
 | This generic TrackPoint | 1        |                                                                   |
 | ATtiny85                | 1        | Don't get the dev board version it might consume more power       |
-| Arduino Uno             | 1        | For programming the ATtiny85, i personally used Arduino Leonardo. |
+| Arduino Uno             | 1        | For programming the ATtiny85, i personally used **Arduino Leonardo**  |
 | 1K ohm resistor         | 1        | Only for the RST pin if you want to use it (i don't)              |
 | 4.7K ohm resistor       | 2        | For the I2C pullup                                                |
 | 100nf capacitor         | 1        |                                                                   |
@@ -37,7 +37,7 @@ Tools:
 
 # The process
 
-## Step 1: Getting the TrackPoint out
+# Step 1: Getting the TrackPoint out
 
 The USB TrackPoint consists of 2 parts:
 - The TrackPoint sensor (the smaller PCB)
@@ -45,11 +45,11 @@ The USB TrackPoint consists of 2 parts:
 
 We only need the TrackPoint sensor here, to do so we'll need to de-solder it.
 
-> Warning: I personally had 2 of these TrackPoints, and in both times i ended up flocking a pin, i eventually recovered them, but this is a very delicate process, don't do them if you were exited for example (i know i was).
+> Warning: I personally had 2 of these TrackPoints, and in both times i ended up flocking 2~3 pins, i eventually recovered them, but this is a very delicate process, don't do them if you were exited for example (i know i was).
 
 <img width="118" height="333" alt="image" src="https://github.com/user-attachments/assets/06aeb2fb-bc92-417d-a4c3-1ac51326be38" />
 
-In order to de-solder it safely, cover the pins with solder and use at least 250C for the solder iron temp, by covering them you would be thermally interfacing with all the pins at once.
+In order to de-solder it safely, cover the pins with flux and extra solder and use at least 250C for the solder iron temp, by covering them you would be thermally interfacing with all the pins at once.
 
 One pin that seemed tricky was the GND pin, it's the left most pin, it's somehow soldered using a different solder material than the other pins, it was so tricky and I'm not sure why it's the case, but I'm guessing more temp is better, may be even flux.
 
@@ -70,7 +70,9 @@ From left to right, the following is the pin mapping table:
 | M3  | |
 | M2  | |
 
-## Step 2: choosing the co-processing
+# Step 2: choosing the co-processing
+
+## Option A: Arduino Pro Mini:
 
 I had an Arduino Pro Mini laying around, i never used it before, not sure why i have bought it in the first place.
 It ended up being a really good fit, but not right away, the Pro Mini had 2 things that consumes power in idle:
@@ -93,5 +95,26 @@ Here's a diagram:
 | -          | A4       | P0.17           | Via 4.7k ohm resistor |
 | -          | A5       | P0.20           | Via 4.7k ohm resistor |
 
-### flashing the Pro Mini
+### Flashing the Pro Mini
+
+Using another Arduino, you can flash the Pro Mini, either using Arduino ISP, or via USB passthrough.
+Honestly this is where you'll need to consult with your favorite LLM.
+
+For me it was a dedicated CH340G AVR programmer (wont work with ATtiny85), it worked fine with no issues flashing the Pro Mini.
+Here's an example of the connection:
+
+| Pro Mini | CH340G |
+| --- | --- |
+| TX | RX |
+| RX | TX |
+| GND | GND |
+| VCC | VCC |
+
+### Resources
+
+- [Pro Mini sketch](https://github.com/Magid-William/promini-trackpoint/blob/master/trackpoint-i2c-slave/trackpoint-i2c-slave.ino) for reading the PS/2 from the TrackPoint
+- [Pre-build hex](https://github.com/Magid-William/promini-trackpoint/releases/tag/Exp60) that you could use them to flash the Pro Mini
+
+
+## Option B: ATtiny85
 
