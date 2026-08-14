@@ -16,12 +16,8 @@ With ZMK using a co-processor.
 - Deep sleep, this is native to ZMK, i simply encourage it as it will save on battery life, personally i make it 15 minutes.
 - Power curve for controlling the mouse movement (personally i prefer it).
 
+# Table of content:
 
-My current setup uses an ATtiny85, but i also used Arduino Pro Mini 8Mhz 3.3V and it was as good.
-
-Using the ATtiny85 this is the wiring:
-
-<img width="2392" height="994" alt="image" src="https://github.com/user-attachments/assets/6e15e552-2714-4715-9216-7201326e7f31" />
 
 ## Bill of materials
 
