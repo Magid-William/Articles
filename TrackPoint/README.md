@@ -21,7 +21,7 @@ My current setup uses an ATtiny85, but i also used Arduino Pro Mini 8Mhz 3.3V an
 
 Using the ATtiny85 this is the wiring:
 
-![](./Attiny-trackpoint.png)
+<img width="2392" height="994" alt="image" src="https://github.com/user-attachments/assets/6e15e552-2714-4715-9216-7201326e7f31" />
 
 ## Bill of materials
 
@@ -133,7 +133,7 @@ Honestly the ATtiny85 felt like a downgrade, I'd stick with the Pro Mini if id h
 
 Here's a diagram again:
 
-![](./Attiny-trackpoint.png)
+<img width="2392" height="994" alt="image" src="https://github.com/user-attachments/assets/6e15e552-2714-4715-9216-7201326e7f31" />
 
 | TrackPoint | ATtiny85 physical pins | Nice!Nano clone | Note    |
 | ---------- | -------- | --------------- | --------------------- |
@@ -169,6 +169,10 @@ This is why the 8 Pin IC Base IC Socket 4+4 Pin are important, as you will move 
 | ICSP Pin 1 (MISO) | Pin 6        | PB1         |
 | ICSP Pin 3 (SCK)  | Pin 7        | PB2         |
 | ICSP Pin 2 (5V)   | Pin 8        | VCC         |
+
+For the PCB here's a closer look at the PCB:
+<img width="1123" height="965" alt="image" src="https://github.com/user-attachments/assets/6a731176-9168-46b1-b146-4c34443a1b36" />
+
 
 ### Resources
 
