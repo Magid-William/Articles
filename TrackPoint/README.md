@@ -181,6 +181,70 @@ This is why the 8 Pin IC Base IC Socket 4+4 Pin are important, as you will move 
 - [Shield example](https://github.com/Magid-William/zmk-trackpoint-shield)
 - [My personal shield](https://github.com/Magid-William/zmk-config-dabaseV_0-2), it uses a dongle
 
+# My dev workflow
+
+<details>
+	
+<summary>
+	The following is Agentic coding workflow, for inspiration only.
+</summary>
+
+
+I used an LLM coding agent for every thing software in this project, this is my first project i start using OpenCode with DeepSeek V4 flash, 
+
+Basically i define every feature/problem/reproduction/bugfix as an experiment, i start by saying 
+
+```
+Read @Experiments.md
+```
+
+It reads the compact `Experiments.md` and says it's ready to work on x, i ignore the suggestion and say
+
+```
+In this experiment i want to do Y, and only focus on Y so i could prove that Y is better than X, blah blah blah.
+Ask me questions before the final plan
+```
+
+It then gives me a plan or ask me clarifying questions
+
+After you approve the plan, it will create an `.md` file for this experiment with the plan, it has hypothesis, method, conclusion will be updated later.
+
+I made sure to make it clear in the `AGENTS.md` that i preferer a closed loop, where the agent:
+- Make changes
+- Commit them
+- Waits until the Github action finishes, iterate if it failed.
+- Programmatically enters bootloader without you physically press the reset button twice
+- Flashes the new firmware
+- Open the serial monitor and read the logs to confirm it's changes are reflected
+
+For example, instead of asking if the TrackPoint is working by moving it physically, ask it to create a synthetic movement in the Pro Mini side, this way you don't have to touch the TrackPoint.
+
+When you are happy with the result ask it:
+```
+conclude this experiment
+```
+
+It will then write it's conclusion in the experiment dedicated `.md` file and update the `Experiments.md`, and commit any uncommitted changes.
+
+Although i now think this last part need more refining to include adding the scripts that worked for it, as some models will keep on retrying many scripts to flash the Pro Mini, where it didn't before, ughhh such's LLM coding life.
+
+But that's basically it, i start an experiment, then 5 hours later (could be 5 could be 10 could be 15 mins, it depends) if i got what i want i; conclude it, if i got no where, i say something like:
+
+```
+Erase this Experiment completely, locally and from Github
+```
+
+I did this only 3~4 times, unless there is something important for example going SPI was important but proved to be pain, so i simply call it failed, so it learn from it and not waste time re exploring failed paths.
+
+It only took 60 experiments for about 2 months 🫥, but hey we are here and I'm using it right now; Yay!! 🎊
+
+By "it" i mean the coding agent of course 🤖🐋.
+
+[Here's the repo with the AGENTS.md and all](https://github.com/Magid-William/trackpoint-knowledge)
+
+</details>
+
+
 # Other resources and Special thanks
 
 - [@db7](https://github.com/db7)
@@ -190,7 +254,7 @@ This is why the 8 Pin IC Base IC Socket 4+4 Pin are important, as you will move 
 - [@alonswartz](https://github.com/alonswartz)
 	- [Guide: How to integrate a TrackPoint in a mechanical keyboard](https://github.com/alonswartz/TrackPoint)
 	
-- [@infusedkim](https://github.com/infused-kim]
+- [@infusedkim](https://github.com/infused-kim)
 	- [kb_zmk_ps2_mouse_TrackPoint_driver](https://github.com/infused-kim/kb_zmk_ps2_mouse_TrackPoint_driver)
 	- [kb_zmk_ps2_mouse_TrackPoint_driver-zmk_config](https://github.com/infused-kim/kb_zmk_ps2_mouse_TrackPoint_driver-zmk_config)
 
