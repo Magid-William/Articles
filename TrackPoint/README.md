@@ -80,7 +80,7 @@ We only need the TrackPoint sensor, so we'll de-solder it.
 
 > **Warning:** I personally had 2 of these TrackPoints, and both times I ended up damaging 2–3 pins. I eventually recovered them, but this is a very delicate process — don't do it if you're excited, for example (I know I was).
 
-<img width="118" height="333" alt="De-soldered TrackPoint sensor" src="https://github.com/user-attachments/assets/06aeb2fb-bc92-417d-a4c3-1ac51326be38" />
+<img width="118" alt="De-soldered TrackPoint sensor" src="https://github.com/user-attachments/assets/06aeb2fb-bc92-417d-a4c3-1ac51326be38" />
 
 To de-solder it safely, cover the pins with flux and extra solder and use at least 250 °C on the iron. By covering the pins you thermally interface with all of them at once.
 
@@ -88,7 +88,7 @@ One pin that seemed tricky was the GND pin, the leftmost one. It seems to be sol
 
 Here's the pin mapping:
 
-<img width="300" height="282" alt="ThinkPad T420 TrackPoint pinout" src="https://github.com/user-attachments/assets/3a3dddd8-4f6e-426e-8266-05f6c4a9d94b" />
+<img width="300" alt="ThinkPad T420 TrackPoint pinout" src="https://github.com/user-attachments/assets/3a3dddd8-4f6e-426e-8266-05f6c4a9d94b" />
 
 From left to right:
 
@@ -112,13 +112,13 @@ I had an Arduino Pro Mini lying around that I'd never used and wasn't sure why I
 - The power regulator (in red)
 - The LED (in orange)
 
-<img width="324" height="603" alt="Pro Mini: power regulator and LED highlighted" src="https://github.com/user-attachments/assets/e335690b-8658-4126-82c5-9f5a59557286" />
+<img width="324" alt="Pro Mini: power regulator and LED highlighted" src="https://github.com/user-attachments/assets/e335690b-8658-4126-82c5-9f5a59557286" />
 
 De-solder them and you get a very solid co-processor. I used the Pro Mini for a week and it + the TrackPoint consumed about 3–4% per day on a 1050 mAh battery (BL-5B Nokia replacement battery).
 
 Here's a diagram:
 
-<img width="1991" height="789" alt="Wiring diagram: TrackPoint, Pro Mini, Nice!Nano" src="https://github.com/user-attachments/assets/f4d626fe-8d12-42b0-a0d6-f5bd54fffdf7" />
+<img width="1991" alt="Wiring diagram: TrackPoint, Pro Mini, Nice!Nano" src="https://github.com/user-attachments/assets/f4d626fe-8d12-42b0-a0d6-f5bd54fffdf7" />
 
 | TrackPoint | Pro Mini | Nice!Nano clone | Note                  |
 | ---------- | -------- | --------------- | --------------------- |
@@ -153,7 +153,7 @@ Honestly, the ATtiny85 felt like a downgrade and I'd stick with the Pro Mini if 
 
 Here's the diagram again:
 
-<img width="2392" height="994" alt="Wiring diagram: TrackPoint, ATtiny85, Nice!Nano" src="https://github.com/user-attachments/assets/6e15e552-2714-4715-9216-7201326e7f31" />
+<img width="2392" alt="Wiring diagram: TrackPoint, ATtiny85, Nice!Nano" src="https://github.com/user-attachments/assets/6e15e552-2714-4715-9216-7201326e7f31" />
 
 | TrackPoint | ATtiny85 physical pins | Nice!Nano clone | Note                  |
 | ---------- | -------- | --------------- | --------------------- |
@@ -279,11 +279,11 @@ It only took 60 experiments over about 2 months 🫥, but hey, we're here and I'
 
 ## Step 4: Using it
 
-<img width="1600" height="1124" alt="The finished keyboard with the TrackPoint" src="https://github.com/user-attachments/assets/405c1641-c9d2-41ea-a336-00711cb01071" />
+<img width="1600" alt="The finished keyboard with the TrackPoint" src="https://github.com/user-attachments/assets/405c1641-c9d2-41ea-a336-00711cb01071" />
 
 I found a random screwdriver cap works great as a "rim cap": I used baking powder and super glue to fill the gap so I could attach it to the TrackPoint. No cracks so far, and it turned out fine.
 
-And that's it — flash the firmware, pair the keyboard, and the nub now drives your cursor. Enjoy your DIY TrackPoint keyboard!
+And that's it — flash the firmware, pair the keyboard, and the nub now drives your cursor.
 
 ## Other Resources and Special Thanks
 
