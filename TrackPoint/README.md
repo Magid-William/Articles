@@ -254,8 +254,6 @@ I did this only 3~4 times, unless there is something important for example going
 
 It only took 60 experiments for about 2 months 🫥, but hey we are here and I'm using it right now; Yay!! 🎊
 
-By "it" i mean the coding agent of course 🤖🐋.
-
 [Here's the repo with the AGENTS.md and all](https://github.com/Magid-William/trackpoint-knowledge)
 
 </details>
