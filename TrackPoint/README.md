@@ -18,6 +18,22 @@ With ZMK using a co-processor.
 
 # Table of content:
 
+- [Intro](#intro)
+- [Features](#features)
+- [Bill of materials](#bill-of-materials)
+- [The process](#the-process)
+- [Step 1: Getting the TrackPoint out](#step-1-getting-the-trackpoint-out)
+- [Step 2: choosing the co-processing](#step-2-choosing-the-co-processing)
+    - [Option A: Arduino Pro Mini](#option-a-arduino-pro-mini)
+        - [Flashing the Pro Mini](#flashing-the-pro-mini)
+        - [Resources](#resources)
+    - [Option B: ATtiny85](#option-b-attiny85)
+        - [Flashing the ATtiny85](#flashing-the-attiny85)
+        - [Resources](#resources)
+- [Step 3: The ZMK side](#step-3-the-zmk-side)
+    - [My dev workflow](#my-dev-workflow)
+- [Step 5: use it](#step-5-use-it)
+- [Other resources and Special thanks](#other-resources-and-special-thanks)
 
 ## Bill of materials
 
