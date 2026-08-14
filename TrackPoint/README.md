@@ -159,7 +159,7 @@ From the Arduino IDE before you connect the ATtiny, flash an Arduino ISP sketch 
 
 This is why the 8 Pin IC Base IC Socket 4+4 Pin are important, as you will move the ATtiny to flash, then back to the Nice!nano for interfacing.
 
-<img width="1031" height="658" alt="https://www.circuito.io/blog/arduino-uno-pinout/" src="https://github.com/user-attachments/assets/6f10453f-b3d9-4d23-b00d-0fb82c1d7bb7" />
+<img width="500" alt="https://www.circuito.io/blog/arduino-uno-pinout/" src="https://github.com/user-attachments/assets/6f10453f-b3d9-4d23-b00d-0fb82c1d7bb7" />
 
 | Uno/Leonardo      | ATtiny85 Pin | Function    |
 |-------------------|--------------|-------------|
@@ -171,8 +171,19 @@ This is why the 8 Pin IC Base IC Socket 4+4 Pin are important, as you will move 
 | ICSP Pin 2 (5V)   | Pin 8        | VCC         |
 
 For the PCB here's a closer look at the PCB:
-<img width="1123" height="965" alt="image" src="https://github.com/user-attachments/assets/6a731176-9168-46b1-b146-4c34443a1b36" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/6a731176-9168-46b1-b146-4c34443a1b36" />
 
+<details>
+
+<summary>More images</summary>
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/a9bf8494-f7bb-4df0-a4b7-265fede32249" />
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/7f64b1bc-6f19-4976-9b83-ddfc1ad8cc03" />
+
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/7b9b5acc-8f1f-4fff-9adc-ecee06d5c1e7" />
+
+</details>
 
 ### Resources
 
