@@ -8,7 +8,16 @@ In this article I'm going to showcase how i integrated a Chinese generic USB Tra
 
 With ZMK using a co-processor.
 
-My current setup uses an ATtiny85, but i also used Arduino ProMini 8Mhz 3.3V and it was as good.
+## Features
+
+- Mouse movement, similar to `layer-toggle` the from `infusidkim`, by interacting with the TrackPoint, you automatically switch to the `tp_layer` layer, where the mouse keys are present, and after ex: 500ms you automatically go back to default layer.
+- Scrolling, by holding a button with `&lt 5 J` (<key>J</key> for Colemak-DH, you may want to use <key>Y</key> if on QWERTY) we move to the `scroll_layer` you'd be able to scroll vertically and horizontally using the TrackPoint.
+- Volume control, same as the scrolling i simply hold k and use the nub to control the volume.
+- Deep sleep, this is native to ZMK, i simply encourage it as it will save on battery life, personally i make it 15 minutes.
+- Power curve for controlling the mouse movement (personally i prefer it).
+
+
+My current setup uses an ATtiny85, but i also used Arduino Pro Mini 8Mhz 3.3V and it was as good.
 
 Using the ATtiny85 this is the wiring:
 
@@ -20,6 +29,7 @@ Using the ATtiny85 this is the wiring:
 | ----------------------- | -------- | ----------------------------------------------------------------- |
 | This generic TrackPoint | 1        |                                                                   |
 | ATtiny85                | 1        | Don't get the dev board version it might consume more power       |
+| 8 Pin IC Base IC Socket 4+4 Pin | 2 | you need at least 2 as you will move the ATtiny from one board to flash to another |
 | Arduino Uno             | 1        | For programming the ATtiny85, i personally used **Arduino Leonardo**  |
 | 1K ohm resistor         | 1        | Only for the RST pin if you want to use it (i don't)              |
 | 4.7K ohm resistor       | 2        | For the I2C pullup                                                |
@@ -61,14 +71,14 @@ From left to right, the following is the pin mapping table:
 
 | Pin | Note |
 | --- | ---- |
-| GND | |
-| CLK | |
-| DAT | |
+| GND |      |
+| CLK |      |
+| DAT |      |
 | RST | Not connected to anything, ignore it |
-| VCC | |
-| M1  | |
-| M3  | |
-| M2  | |
+| VCC |      |
+| M1  |      |
+| M3  |      |
+| M2  |      |
 
 # Step 2: choosing the co-processing
 
@@ -104,17 +114,88 @@ For me it was a dedicated CH340G AVR programmer (wont work with ATtiny85), it wo
 Here's an example of the connection:
 
 | Pro Mini | CH340G |
-| --- | --- |
-| TX | RX |
-| RX | TX |
-| GND | GND |
-| VCC | VCC |
+| -------- | ------ |
+| TX       | RX     |
+| RX       | TX     |
+| GND      | GND    |
+| VCC      | VCC    |
 
 ### Resources
 
-- [Pro Mini sketch](https://github.com/Magid-William/promini-trackpoint/blob/master/trackpoint-i2c-slave/trackpoint-i2c-slave.ino) for reading the PS/2 from the TrackPoint
+- [Pro Mini sketch](https://github.com/Magid-William/promini-trackpoint/blob/master/trackpoint-i2c-slave/trackpoint-i2c-slave.ino) for reading the PS/2 from the TrackPoint and interfacing using I2C 
 - [Pre-build hex](https://github.com/Magid-William/promini-trackpoint/releases/tag/Exp60) that you could use them to flash the Pro Mini
-
 
 ## Option B: ATtiny85
 
+I thought the Pro Mini consuming more power, So i asked an LLM and it suggested an ATtiny, i was able to source ATtiny85 locally.
+
+Honestly the ATtiny85 felt like a downgrade, I'd stick with the Pro Mini if id had to choose all over again, but in case you prefer it too or have a similar form factor to the ATtiny85 then follow along.
+
+Here's a diagram again:
+
+![](./Attiny-trackpoint.png)
+
+| TrackPoint | ATtiny85 physical pins | Nice!Nano clone | Note    |
+| ---------- | -------- | --------------- | --------------------- |
+| -          | 1        | -               | Leave RST float       |
+| CLK        | 2        | -               |                       |
+| DAT        | 3        | -               |                       |
+| GND        | 4        | GND             |                       |
+| -          | 5        | P0.20           | Via 4.7k ohm resistor |
+| -          | 6        | P0.06           | MOT                   |
+| -          | 7        | P0.17           | Via 4.7k ohm resistor |
+| VCC        | 8        | VCC             |                       |
+| -          | 4 -> 8   | -               | Via 100nf capacitor   |
+
+There seem to be difference between the ATtiny85 and the Pro Mini, that required the ATtiny85 to have MOT line, this is better than doing blind 10ms polling, the MOT made a huge difference on how the ATtiny85 smooth reading.
+
+### Flashing the ATtiny85
+
+This is where another Arduino (not the dedicated CH340G) like Arduino Uno or the Arduino Leonardo which is the one i used, could be used to flash the ATtiny.
+
+But regardless I'm sure the wiring are identical (although i only tested with Leonardo), you would typically connect pins from the ICSP to the ATtiny
+
+From the Arduino IDE before you connect the ATtiny, flash an Arduino ISP sketch to the Uno/Leonardo, you should find it in the Example in the Arduino IDE.
+
+This is why the 8 Pin IC Base IC Socket 4+4 Pin are important, as you will move the ATtiny to flash, then back to the Nice!nano for interfacing.
+
+<img width="1031" height="658" alt="image" src="https://github.com/user-attachments/assets/6f10453f-b3d9-4d23-b00d-0fb82c1d7bb7" />
+
+| Uno/Leonardo      | ATtiny85 Pin | Function    |
+|-------------------|--------------|-------------|
+| Digital Pin 10    | Pin 1        | RESET (PB5) |
+| ICSP Pin 6 (GND)  | Pin 4        | GND         |
+| ICSP Pin 4 (MOSI) | Pin 5        | PB0         |
+| ICSP Pin 1 (MISO) | Pin 6        | PB1         |
+| ICSP Pin 3 (SCK)  | Pin 7        | PB2         |
+| ICSP Pin 2 (5V)   | Pin 8        | VCC         |
+
+### Resources
+
+- [The ATtiny85 sketch](https://github.com/Magid-William/attiny85-trackpoint/blob/main/trackpoint-i2c-slave-attiny85/trackpoint-i2c-slave-attiny85.ino) for reading the PS/2 from the TrackPoint and interfacing using I2C
+- [Pre-builds hex](https://github.com/Magid-William/attiny85-trackpoint/releases/tag/EXP64) ready to be flashed
+
+# Step 3: The ZMK side
+
+- [Here's the driver](https://github.com/Magid-William/zmk-trackpoint-driver) it holds integration instructions.
+- [Shield example](https://github.com/Magid-William/zmk-trackpoint-shield)
+- [My personal shield](https://github.com/Magid-William/zmk-config-dabaseV_0-2), it uses a dongle
+
+# Other resources and Special thanks
+
+- [@db7](https://github.com/db7)
+	- [Cheap and Dirty Logic Analyzer with Teensy](https://randalea.de/~db7/teensy-logic-analyzer.html)
+	- [Crunching a PS/2 Mouse Decoder](https://randalea.de/~db7/crunch-ps2-decoder.html)
+  
+- [@alonswartz](https://github.com/alonswartz)
+	- [Guide: How to integrate a TrackPoint in a mechanical keyboard](https://github.com/alonswartz/TrackPoint)
+	
+- [@infusedkim](https://github.com/infused-kim]
+	- [kb_zmk_ps2_mouse_TrackPoint_driver](https://github.com/infused-kim/kb_zmk_ps2_mouse_TrackPoint_driver)
+	- [kb_zmk_ps2_mouse_TrackPoint_driver-zmk_config](https://github.com/infused-kim/kb_zmk_ps2_mouse_TrackPoint_driver-zmk_config)
+
+- [@Ahmed-M-Osman1](https://github.com/Ahmed-M-Osman1)
+	- [His i2c trackpad example](https://github.com/Ahmed-M-Osman1/zmk-driver-azoteq)
+	
+- [@badjeff](https://github.com/badjeff)
+	- [All his github repos were valiable](https://github.com/badjeff)
