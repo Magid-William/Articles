@@ -70,4 +70,28 @@ From left to right, the following is the pin mapping table:
 | M3  | |
 | M2  | |
 
-## Step 2:
+## Step 2: choosing the co-processing
+
+I had an Arduino Pro Mini laying around, i never used it before, not sure why i have bought it in the first place.
+It ended up being a really good fit, but not right away, the Pro Mini had 2 things that consumes power in idle:
+- The Power regulator (in red)
+- The LED (in orange)
+
+<img width="324" height="603" alt="image" src="https://github.com/user-attachments/assets/e335690b-8658-4126-82c5-9f5a59557286" />
+
+By de-soldering them you'll get a very solid choice for a co-processor.
+I did use the Pro Mini for a week and it + the TrackPoint used to consume like 3~4% a day on a 1050mha battery (BL-5B Nokia replacement battery).
+
+Here's a diagram:
+
+<img width="1991" height="789" alt="image" src="https://github.com/user-attachments/assets/f4d626fe-8d12-42b0-a0d6-f5bd54fffdf7" />
+
+| TrackPoint | Pro Mini | Nice!Nano clone | Note                  |
+| ---------- | -------- | --------------- | --------------------- |
+| CLK        | D7       | -               |                       |
+| DAT        | D2       | -               |                       |
+| -          | A4       | P0.17           | Via 4.7k ohm resistor |
+| -          | A5       | P0.20           | Via 4.7k ohm resistor |
+
+### flashing the Pro Mini
+
