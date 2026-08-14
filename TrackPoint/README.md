@@ -10,7 +10,7 @@ With ZMK, using a co-processor.
 
 ## Features
 
-- **Mouse movement** — similar to the `layer-toggle` from `infused-kim`: by interacting with the TrackPoint you automatically switch to the `tp_layer` layer (where the mouse keys live), and after e.g. 500 ms of inactivity you automatically return to the default layer.
+- **Mouse movement** — similar to the `layer-toggle` from `infused-kim`: by interacting with the TrackPoint you automatically switch to the `tp_layer` layer (where the mouse keys live), and after ~2 s of inactivity you automatically return to the default layer.
 - **Scrolling** — hold a key to switch to the `scroll_layer` and scroll vertically and horizontally with the nub. For me it's `J` on Colemak-DH (you'd probably use `Y` on QWERTY).
 - **Volume control** — same idea: hold `K` and use the nub to control the volume.
 - **Deep sleep** — native to ZMK; I encourage it as it saves battery. Personally I set it to 15 minutes.
@@ -22,7 +22,7 @@ The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (an
 
 - The co-processor reads X/Y movement from the TrackPoint over PS/2.
 - It exposes the data as an I2C slave at address `0x42`.
-- ZMK's `promini,trackpoint-i2c` driver polls that I2C slave and feeds the pointer into ZMK.
+- ZMK's `promini,trackpoint-i2c` driver reads that I2C slave — triggered by the MOT data-ready line, not blind polling — and feeds the pointer into ZMK.
 - The keyboard then behaves like it has a built-in pointing device.
 
 This article walks through de-soldering the TrackPoint, wiring either an Arduino Pro Mini or an ATtiny85 as the co-processor, and getting it working in ZMK.
@@ -123,7 +123,7 @@ Here's a diagram:
 | TrackPoint | Pro Mini | Nice!Nano clone | Note                  |
 | ---------- | -------- | --------------- | --------------------- |
 | CLK        | D7       | -               |                       |
-| DAT        | D2       | -               |                       |
+| DAT        | D3       | -               |                       |
 | -          | A4       | P0.17           | Via 4.7K ohm resistor |
 | -          | A5       | P0.20           | Via 4.7K ohm resistor |
 
@@ -161,9 +161,9 @@ Here's the diagram again:
 | CLK        | 2        | -               |                       |
 | DAT        | 3        | -               |                       |
 | GND        | 4        | GND             |                       |
-| -          | 5        | P0.20           | Via 4.7K ohm resistor |
+| -          | 5        | P0.17           | Via 4.7K ohm resistor |
 | -          | 6        | P0.06           | MOT                   |
-| -          | 7        | P0.17           | Via 4.7K ohm resistor |
+| -          | 7        | P0.20           | Via 4.7K ohm resistor |
 | VCC        | 8        | VCC             |                       |
 | -          | 4 -> 8   | -               | Via 100nF capacitor   |
 
