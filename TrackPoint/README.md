@@ -170,7 +170,8 @@ This is why the 8 Pin IC Base IC Socket 4+4 Pin are important, as you will move 
 | ICSP Pin 3 (SCK)  | Pin 7        | PB2         |
 | ICSP Pin 2 (5V)   | Pin 8        | VCC         |
 
-For the PCB here's a closer look at the PCB:
+For the PCB here's a closer look at the PCB:   
+
 <img width="500" alt="image" src="https://github.com/user-attachments/assets/6a731176-9168-46b1-b146-4c34443a1b36" />
 
 <details>
