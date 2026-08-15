@@ -78,7 +78,8 @@ The USB TrackPoint consists of 2 parts:
 
 We only need the TrackPoint sensor, so we'll de-solder it.
 
-> **Warning:** I personally had 2 of these TrackPoints, and both times I ended up damaging 2–3 pins. I eventually recovered them, but this is a very delicate process — don't do it if you're excited, for example (I know I was).
+> [!WARNING]
+> I personally had 2 of these TrackPoints, and both times I ended up damaging 2–3 pins. I eventually recovered them, but this is a very delicate process — don't do it if you're excited, for example (I know I was).
 
 <img width="118" alt="De-soldered TrackPoint sensor" src="https://github.com/user-attachments/assets/06aeb2fb-bc92-417d-a4c3-1ac51326be38" />
 
