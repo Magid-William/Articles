@@ -1,4 +1,4 @@
-# Building a TrackPoint into a ZMK keyboard
+# Guide: Integrating common USB TrackPoint with ZMK using a coprocessor
 
 ## Intro
 
@@ -115,7 +115,7 @@ I had an Arduino Pro Mini lying around that I'd never used and wasn't sure why I
 
 <img width="324" alt="Pro Mini: power regulator and LED highlighted" src="https://github.com/user-attachments/assets/e335690b-8658-4126-82c5-9f5a59557286" />
 
-De-solder them and you get a very solid co-processor. I used the Pro Mini for a week and it + the TrackPoint consumed about 3–4% per day on a 1050 mAh battery (BL-5B Nokia replacement battery).
+De-solder them and you get a very solid co-processor. I used the Pro Mini for a week and it + the TrackPoint consumed about 3–4% per day on a 1050 mAh battery (BL-5B Nokia replacement battery) compared to 1% per day for the left side with the same battery.
 
 Here's a diagram:
 
