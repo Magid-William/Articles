@@ -161,6 +161,24 @@ I thought the Pro Mini consumed too much power, so I asked an LLM and it suggest
 
 Honestly, the ATtiny85 felt like a downgrade and I'd stick with the Pro Mini if I had to choose all over again. But if you prefer it, or have a form factor more like the ATtiny85, follow along.
 
+### Why I'd pick the Pro Mini over the ATtiny85
+
+The ATtiny85 is a capable little chip, but as a PS/2-to-I2C bridge it's working at its limits:
+
+- **Bit-banging headroom.** The ATtiny85 runs at 1 MHz (factory fuses). PS/2 bit-banging on it is a busy-loop against a ~10–40 kHz clock, and I had to raise the byte-read timeout to ~7.5 ms (Exp58) because the 1 MHz chip was timing out inside the trackpoint's ~7 ms inter-packet gap — the cursor was choppy until that fix ([Exp58](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp58/Exp58.md)). The Pro Mini's 8 MHz gives ~8× the cycles for the same job; the read never comes close to its timeout.
+- **Memory budget.** The PowerCurve library (velocity curve) is a 128 B LUT. On the ATtiny85 that pushed the build to 68% flash / 45% RAM (Exp61) — it fits, but with barely any room left for debug or sleep logic ([Exp61](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp61/Exp61.md)). The Pro Mini's 32 KB flash / 2 KB RAM sits comfortably under 30% with the same curve.
+- **Serial debugging.** The Pro Mini has a real UART (9600 — the 8 MHz chip can't do 115200 reliably, so use 9600). The ATtiny85 has none: you get software serial that eats pins, or the ISP-bridge dance ([Exp52](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp52/Exp52.md)–[Exp54](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp54/Exp54.md)).
+- **Flashing.** Pro Mini = simple CH340G adapter, `avrdude -c stk500v1`, hands-free DTR auto-reset. ATtiny85 = an ISP (another Arduino running ArduinoISP) and moving the DIP-8 between programmer socket and keyboard.
+- **I2C.** The Pro Mini has dedicated TWI hardware; the ATtiny85 bit-bangs I2C through its USI. Both work, but hardware TWI is one less thing to go wrong.
+- **GPIOs.** The 85 has ~5–6 usable pins; the Pro Mini ~20 — no trade-offs if you add a MOT line, LED, button, or future sensor.
+
+**Where the ATtiny85 genuinely wins:**
+
+- **Size.** DIP-8 on a socket fits anywhere — the main reason it earns a place.
+- **Power.** ~0.4–0.5 mA active at 1 MHz vs the Pro Mini's ~2–4 mA (plus regulator and LED unless you desolder them). In a build without power gating it's friendlier — but the trackpoint itself dominates the budget either way.
+
+Bottom line: footprint and standalone battery life → ATtiny85; headroom, debugging, and a saner flashing workflow → Pro Mini.
+
 Here's the diagram again:
 
 <img width="2392" alt="Wiring diagram: TrackPoint, ATtiny85, Nice!Nano" src="https://github.com/user-attachments/assets/6e15e552-2714-4715-9216-7201326e7f31" />
