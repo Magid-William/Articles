@@ -8,6 +8,9 @@ In this article I'm going to showcase how I integrated a Chinese generic USB Tra
 
 With ZMK, using a co-processor.
 
+> [!WARNING]
+> **Don't buy this module** — unless you already own one and want to reuse it in a wireless build, or you have no other way to source a TrackPoint. For common TrackPoints with documented pinouts, see [alonswartz's pinout collection](https://github.com/alonswartz/trackpoint/tree/master/pinouts).
+
 ## Features
 
 - **Mouse movement** — similar to the `layer-toggle` from `infused-kim`: by interacting with the TrackPoint you automatically switch to the `tp_layer` layer (where the mouse keys live), and after ~2 s of inactivity you automatically return to the default layer.
@@ -15,6 +18,11 @@ With ZMK, using a co-processor.
 - **Volume control** — same idea: hold `K` and use the nub to control the volume.
 - **Deep sleep** — native to ZMK; I encourage it as it saves battery. Personally I set it to 15 minutes.
 - **Power curve** — for controlling the smoothness of the mouse movement (I prefer it).
+
+## Known issues
+
+> [!CAUTION]
+> Occasionally the cursor drifts in a random direction for about 1 second, then returns to normal. It happens roughly once a day, and I haven't found the cause yet.
 
 ## How it works
 
@@ -31,6 +39,7 @@ This article walks through de-soldering the TrackPoint, wiring either an Arduino
 
 - [Intro](#intro)
 - [Features](#features)
+- [Known issues](#known-issues)
 - [How it works](#how-it-works)
 - [Bill of Materials](#bill-of-materials)
 - [Step 1: Getting the TrackPoint out](#step-1-getting-the-trackpoint-out)
@@ -294,6 +303,7 @@ And that's it — flash the firmware, pair the keyboard, and the nub now drives 
 
 - [@alonswartz](https://github.com/alonswartz)
 	- [Guide: How to integrate a TrackPoint in a mechanical keyboard](https://github.com/alonswartz/TrackPoint)
+	- [Common TrackPoint pinouts](https://github.com/alonswartz/trackpoint/tree/master/pinouts)
 
 - [@infused-kim](https://github.com/infused-kim)
 	- [kb_zmk_ps2_mouse_TrackPoint_driver](https://github.com/infused-kim/kb_zmk_ps2_mouse_TrackPoint_driver)
