@@ -128,7 +128,8 @@ De-solder them and you get a very solid co-processor. I used the Pro Mini for a 
 
 Here's a diagram:
 
-<img width="1991" alt="Wiring diagram: TrackPoint, Pro Mini, Nice!Nano" src="https://github.com/user-attachments/assets/f4d626fe-8d12-42b0-a0d6-f5bd54fffdf7" />
+<img width="2203" alt="Wiring diagram: TrackPoint, Pro Mini, Nice!Nano" src="https://github.com/user-attachments/assets/352e6fcd-f611-4064-8c86-8c77cc49735f" />
+
 
 | TrackPoint | Pro Mini | Nice!Nano clone | Note                  |
 | ---------- | -------- | --------------- | --------------------- |
