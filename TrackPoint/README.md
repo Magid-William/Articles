@@ -9,7 +9,7 @@ In this article I'm going to showcase how I integrated a Chinese generic USB Tra
 With ZMK, using a co-processor.
 
 > [!WARNING]
-> **Don't buy this module** — unless you already own one and want to reuse it in a wireless build, or you have no other way to source a TrackPoint. For common TrackPoints with documented pinouts, see [alonswartz's pinout collection](https://github.com/alonswartz/trackpoint/tree/master/pinouts).
+> **Don't buy this module** — unless you already own one and want to reuse it in a wireless build, or you have no other way to source a TrackPoint. it has it's quirks and every now and then will move on it's own, For common TrackPoints with documented pinouts, see [alonswartz's pinout collection](https://github.com/alonswartz/trackpoint/tree/master/pinouts).
 
 ## Features
 
