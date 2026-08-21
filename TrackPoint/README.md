@@ -30,10 +30,9 @@ The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (an
 
 - The co-processor reads X/Y movement from the TrackPoint over PS/2.
 - It exposes the data as an I2C slave at address `0x42`.
-- ZMK's `promini,trackpoint-i2c` driver reads that I2C slave — triggered by the MOT data-ready line, not blind polling — and feeds the pointer into ZMK.
-- The keyboard then behaves like it has a built-in pointing device.
+- ZMK's [`trackpoint-i2c` driver](https://github.com/Magid-William/attiny85-trackpoint) reads that I2C slave — triggered by the MOT data-ready line, not blind polling — and feeds the pointer into ZMK.
 
-This article walks through de-soldering the TrackPoint, wiring either an Arduino Pro Mini or an ATtiny85 as the co-processor, and getting it working in ZMK.
+This article walks through de-soldering the TrackPoint, wiring either an [Arduino Pro Mini](#option-a-arduino-pro-mini) or an [ATtiny85](#option-b-attiny85) as the co-processor, and getting it working in ZMK.
 
 ## Table of Contents
 
@@ -88,13 +87,13 @@ The USB TrackPoint consists of 2 parts:
 We only need the TrackPoint sensor, so we'll de-solder it.
 
 > [!WARNING]
-> I personally had 2 of these TrackPoints, and both times I ended up damaging 2–3 pins. I eventually recovered them, but this is a very delicate process — don't do it if you're excited, for example (I know I was).
+> I personally had 2 of these TrackPoints, and both times I ended up damaging 2–3 pins. I eventually recovered them, but this is a very delicate process. Don't do it if you're excited (I know I was).
 
 <img width="118" alt="De-soldered TrackPoint sensor" src="https://github.com/user-attachments/assets/06aeb2fb-bc92-417d-a4c3-1ac51326be38" />
 
-To de-solder it safely, cover the pins with flux and extra solder and use at least 250 °C on the iron. By covering the pins you thermally interface with all of them at once.
+To de-solder it safely, cover the pins with flux and extra solder and use at least `250 °C` on the iron. By covering the pins you thermally interface with all of them at once.
 
-One pin that seemed tricky was the GND pin, the leftmost one. It seems to be soldered with a different solder material than the rest, and I'm not sure why. I'm guessing more temperature helps, maybe even more flux.
+One pin that seemed tricky was the `GND` pin, the leftmost one. It seems to be soldered with a different solder material than the rest, and I'm not sure why. I'm guessing more temperature helps, maybe even more flux.
 
 Here's the pin mapping:
 
@@ -124,7 +123,8 @@ I had an Arduino Pro Mini lying around that I'd never used and wasn't sure why I
 
 <img width="324" alt="Pro Mini: power regulator and LED highlighted" src="https://github.com/user-attachments/assets/e335690b-8658-4126-82c5-9f5a59557286" />
 
-De-solder them and you get a very solid co-processor. I used the Pro Mini for a week and it + the TrackPoint consumed about 3–4% per day on a 1050 mAh battery (BL-5B Nokia replacement battery) compared to 1% per day for the left side with the same battery.
+De-solder them and you get a very solid co-processor (it's okay to break the led with a plier). 
+I used the Pro Mini for a week and it + the TrackPoint consumed about 3–4% per day on a 1050 mAh battery (BL-5B Nokia replacement battery) compared to 1% per day for the left side with the same battery.
 
 Here's a diagram:
 
@@ -135,14 +135,14 @@ Here's a diagram:
 | ---------- | -------- | --------------- | --------------------- |
 | CLK        | D7       | -               |                       |
 | DAT        | D3       | -               |                       |
-| -          | A4       | P0.17           | Via 4.7K ohm resistor |
-| -          | A5       | P0.20           | Via 4.7K ohm resistor |
+| -          | A4       | P0.17           | Via 4.7K ohm resistor, connected to VCC |
+| -          | A5       | P0.20           | Via 4.7K ohm resistor, connected to VCC |
 
 #### Flashing the Pro Mini
 
 You can flash the Pro Mini using another Arduino (Arduino ISP or USB passthrough). Honestly, this is where you'll want to consult your favorite LLM.
 
-For me it was a dedicated CH340G AVR programmer (which won't work with the ATtiny85), and it flashed the Pro Mini with no issues. Here's an example of the connection:
+For me it was a dedicated `CH340G` AVR programmer (which won't work with the ATtiny85), and it flashed the Pro Mini with no issues. Here's an example of the connection:
 
 | Pro Mini | CH340G |
 | -------- | ------ |
@@ -166,13 +166,6 @@ Honestly, the ATtiny85 felt like a downgrade and I'd stick with the Pro Mini if 
 
 The ATtiny85 works, but it's tight on every axis:
 
-- **Bit-banging.** At 1 MHz (factory fuses) its PS/2 read busy-loop needed a longer timeout to cover the trackpoint's ~7 ms inter-packet gap — choppy until fixed ([Exp58](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp58/Exp58.md)). The Pro Mini's 8 MHz has ~8× the headroom.
-- **Memory.** The PowerCurve LUT pushes the 85 to 68% flash / 45% RAM ([Exp61](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp61/Exp61.md)). The Pro Mini's 32 KB / 2 KB sits under 30%.
-- **Serial.** Pro Mini has a real UART (9600); the 85 needs software serial or an ISP-bridge ([Exp52](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp52/Exp52.md)–[Exp54](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp54/Exp54.md)).
-- **Flashing.** Pro Mini = CH340G + `avrdude -c stk500v1`, hands-free. 85 = Arduino ISP + moving the DIP-8 between sockets.
-- **I2C.** Pro Mini has dedicated TWI hardware; the 85 bit-bangs it via USI.
-- **GPIOs.** ~5–6 usable on the 85 vs ~20 on the Pro Mini.
-
 **Where the ATtiny85 wins:** size (DIP-8 fits anywhere) and power (~0.5 mA vs ~2–4 mA active) — though the trackpoint dominates the budget either way.
 
 Bottom line: footprint/battery → ATtiny85; headroom, debugging, flashing → Pro Mini.
@@ -187,17 +180,17 @@ Here's the diagram again:
 | CLK        | 2        | -               |                       |
 | DAT        | 3        | -               |                       |
 | GND        | 4        | GND             |                       |
-| -          | 5        | P0.17           | Via 4.7K ohm resistor |
+| -          | 5        | P0.17           | Via 4.7K ohm resistor, connected to VCC |
 | -          | 6        | P0.06           | MOT                   |
-| -          | 7        | P0.20           | Via 4.7K ohm resistor |
+| -          | 7        | P0.20           | Via 4.7K ohm resistor, connected to VCC |
 | VCC        | 8        | VCC             |                       |
 | -          | 4 -> 8   | -               | Via 100nF capacitor   |
 
-The ATtiny85 setup differs from the Pro Mini in that it needs a MOT line. That's better than blind 10 ms polling — the MOT line made a huge difference to the smoothness of the ATtiny85's readings.
+The ATtiny85 setup differs from the Pro Mini in that it needs a `MOT` line. That's better than blind 10 ms polling — the `MOT` line made a huge difference to the smoothness of the ATtiny85's readings.
 
 #### Flashing the ATtiny85
 
-This is where another Arduino comes in — not the dedicated CH340G — like an Arduino Uno or the Leonardo I used, to flash the ATtiny. The wiring should be identical between them (I only tested with the Leonardo): typically you connect pins from the ICSP header to the ATtiny.
+This is where another Arduino comes in — not the dedicated `CH340G` — like an Arduino Uno or the Leonardo I used, to flash the ATtiny. The wiring should be identical between them (I only tested with the Leonardo): typically you connect pins from the `ICSP` header to the ATtiny.
 
 From the Arduino IDE, before connecting the ATtiny, flash an Arduino ISP sketch to the Uno/Leonardo — you'll find it in the Examples menu of the Arduino IDE.
 
@@ -249,7 +242,7 @@ Here's a closer look at the PCB:
 	The following is an agentic coding workflow, for inspiration only.
 </summary>
 
-I used an LLM coding agent for everything software-related in this project; this is my first project using OpenCode with DeepSeek V4 flash.
+I used an LLM coding agent for everything software in this project; this is my first project using OpenCode with DeepSeek V4 flash.
 
 Basically I define every feature/problem/reproduction/bugfix as an experiment, starting with:
 
