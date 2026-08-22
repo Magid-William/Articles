@@ -99,6 +99,8 @@ Here's the pin mapping:
 
 <img width="300" alt="ThinkPad T420 TrackPoint pinout" src="https://github.com/user-attachments/assets/3a3dddd8-4f6e-426e-8266-05f6c4a9d94b" />
 
+> [Source](https://deskthority.net/wiki/TrackPoint_Hardware)
+
 From left to right:
 
 | Pin | Note |
