@@ -24,6 +24,11 @@ With ZMK, using a co-processor.
 > [!CAUTION]
 > Occasionally the cursor drifts in a random direction for about 1 second, then returns to normal. It happens roughly once a day, and I haven't found the cause yet.
 
+Steps for repro:
+- Let's say you are scrolling down slowly, keep scrolling for a good 5 minutes.
+- During the 5 minutes you will sense resistance.
+- lift your finger, and notice the mouse moving in a direction for 1sec or less then stops.
+
 After some googling, i saw many people having the same drift issue, here's the most notable:
 - [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather vs on an AC set to 26c, there is merits to this.
 - [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying.
