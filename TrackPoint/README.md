@@ -24,6 +24,10 @@ With ZMK, using a co-processor.
 > [!CAUTION]
 > Occasionally the cursor drifts in a random direction for about 1 second, then returns to normal. It happens roughly once a day, and I haven't found the cause yet.
 
+After some googling, i saw many people having the same drift issue, here's the most notable:
+- [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather vs on an AC set to 26c, there is merits to this.
+- [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying.
+
 ## How it works
 
 The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (and it would drain battery decoding it). So a small AVR co-processor sits in between:
