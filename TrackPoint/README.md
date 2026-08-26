@@ -9,15 +9,15 @@ In this article I'm going to showcase how I integrated a Chinese generic USB Tra
 With ZMK, using a co-processor.
 
 > [!WARNING]
-> **Don't buy this module** — unless you already own one and want to reuse it in a wireless build, or you have no other way to source a TrackPoint. it has it's quirks and every now and then will move on it's own, For common TrackPoints with documented pinouts, see [alonswartz's pinout collection](https://github.com/alonswartz/trackpoint/tree/master/pinouts).
+> **Don't buy this module**, unless you already own one and want to reuse it in a wireless build, or you have no other way to source a TrackPoint. it has it's quirks and every now and then will move on it's own, For common TrackPoints with documented pinouts, see [alonswartz's pinout collection](https://github.com/alonswartz/trackpoint/tree/master/pinouts).
 
 ## Features
 
-- **Mouse movement** — similar to the `layer-toggle` from `infused-kim`: by interacting with the TrackPoint you automatically switch to the `tp_layer` layer (where the mouse keys live), and after ~2 s of inactivity you automatically return to the default layer.
-- **Scrolling** — hold a key to switch to the `scroll_layer` and scroll vertically and horizontally with the nub. For me it's `J` on Colemak-DH (you'd probably use `Y` on QWERTY).
-- **Volume control** — same idea: hold `K` and use the nub to control the volume.
-- **Deep sleep** — native to ZMK; I encourage it as it saves battery. Personally I set it to 15 minutes.
-- **Power curve** — for controlling the smoothness of the mouse movement (I prefer it).
+- **Mouse movement**, similar to the `layer-toggle` from `infused-kim`: by interacting with the TrackPoint you automatically switch to the `tp_layer` layer (where the mouse keys live), and after ~2 s of inactivity you automatically return to the default layer.
+- **Scrolling**, hold a key to switch to the `scroll_layer` and scroll vertically and horizontally with the nub. For me it's `J` on Colemak-DH (you'd probably use `Y` on QWERTY).
+- **Volume control**, same idea: hold `K` and use the nub to control the volume.
+- **Deep sleep**, native to ZMK; I encourage it as it saves battery. Personally I set it to 15 minutes.
+- **Power curve**, for controlling the smoothness of the mouse movement (I prefer it).
 
 ## Known issues
 
@@ -39,7 +39,7 @@ The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (an
 
 - The co-processor reads X/Y movement from the TrackPoint over PS/2.
 - It exposes the data as an I2C slave at address `0x42`.
-- ZMK's [`trackpoint-i2c` driver](https://github.com/Magid-William/attiny85-trackpoint) reads that I2C slave — triggered by the MOT data-ready line, not blind polling — and feeds the pointer into ZMK.
+- ZMK's [`trackpoint-i2c` driver](https://github.com/Magid-William/attiny85-trackpoint) reads that I2C slave, triggered by the MOT data-ready line, not blind polling, and feeds the pointer into ZMK.
 
 This article walks through de-soldering the TrackPoint, wiring either an [Arduino Pro Mini](#option-a-arduino-pro-mini) or an [ATtiny85](#option-b-attiny85) as the co-processor, and getting it working in ZMK.
 
@@ -177,7 +177,7 @@ Honestly, the ATtiny85 felt like a downgrade and I'd stick with the Pro Mini if 
 
 The ATtiny85 works, but it's tight on every axis:
 
-**Where the ATtiny85 wins:** size (DIP-8 fits anywhere) and power (~0.5 mA vs ~2–4 mA active) — though the trackpoint dominates the budget either way.
+**Where the ATtiny85 wins:** size (DIP-8 fits anywhere) and power (~0.5 mA vs ~2–4 mA active), though the trackpoint dominates the budget either way.
 
 Bottom line: footprint/battery → ATtiny85; headroom, debugging, flashing → Pro Mini.
 
@@ -197,13 +197,13 @@ Here's the diagram again:
 | VCC        | 8        | VCC             |                       |
 | -          | 4 -> 8   | -               | Via 100nF capacitor   |
 
-The ATtiny85 setup differs from the Pro Mini in that it needs a `MOT` line. That's better than blind 10 ms polling — the `MOT` line made a huge difference to the smoothness of the ATtiny85's readings.
+The ATtiny85 setup differs from the Pro Mini in that it needs a `MOT` line. That's better than blind 10 ms polling, the `MOT` line made a huge difference to the smoothness of the ATtiny85's readings.
 
 #### Flashing the ATtiny85
 
-This is where another Arduino comes in — not the dedicated `CH340G` — like an Arduino Uno or the Leonardo I used, to flash the ATtiny. The wiring should be identical between them (I only tested with the Leonardo): typically you connect pins from the `ICSP` header to the ATtiny.
+This is where another Arduino comes in, not the dedicated `CH340G`j like an Arduino Uno or the Leonardo I used, to flash the ATtiny. The wiring should be identical between them (I only tested with the Leonardo): typically you connect pins from the `ICSP` header to the ATtiny.
 
-From the Arduino IDE, before connecting the ATtiny, flash an Arduino ISP sketch to the Uno/Leonardo — you'll find it in the Examples menu of the Arduino IDE.
+From the Arduino IDE, before connecting the ATtiny, flash an Arduino ISP sketch to the Uno/Leonardo, you'll find it in the Examples menu of the Arduino IDE.
 
 This is why the two 8-pin IC sockets (4+4 pin) matter: you move the ATtiny between the programmer and the Nice!Nano keyboard for interfacing.
 
@@ -241,7 +241,7 @@ Here's a closer look at the PCB:
 
 ## Step 3: The ZMK side
 
-- [Here's the driver](https://github.com/Magid-William/zmk-trackpoint-driver) — it holds the integration instructions.
+- [Here's the driver](https://github.com/Magid-William/zmk-trackpoint-driver), it holds the integration instructions.
 - [Shield example](https://github.com/Magid-William/zmk-trackpoint-shield)
 - [My personal shield](https://github.com/Magid-William/zmk-config-dabaseV_0-2), which uses a dongle
 
@@ -270,7 +270,7 @@ Ask me questions before the final plan
 
 It then gives me a plan or asks me clarifying questions.
 
-After I approve the plan, it creates an `.md` file for the experiment with the plan — hypothesis, method, and a conclusion that gets updated later.
+After I approve the plan, it creates an `.md` file for the experiment with the plan, hypothesis, method, and a conclusion that gets updated later.
 
 I made sure to make it clear in the `AGENTS.md` that I prefer a closed loop, where the agent:
 
@@ -281,7 +281,7 @@ I made sure to make it clear in the `AGENTS.md` that I prefer a closed loop, whe
 - Flashes the new firmware
 - Opens the serial monitor and reads the logs to confirm its changes are reflected
 
-For example, instead of asking if the TrackPoint works by moving it physically, ask it to create a synthetic movement on the Pro Mini side — this way you don't have to touch the TrackPoint.
+For example, instead of asking if the TrackPoint works by moving it physically, ask it to create a synthetic movement on the Pro Mini side, this way you don't have to touch the TrackPoint.
 
 When you're happy with the result, ask it:
 
@@ -291,15 +291,15 @@ conclude this experiment
 
 It writes the conclusion in the experiment's dedicated `.md` file, updates `Experiments.md`, and commits any uncommitted changes.
 
-Although I now think this last part needs more refining — like including the scripts that worked for it, since some models keep retrying many scripts to flash the Pro Mini where they didn't before. Ugh, such is LLM coding life.
+Although I now think this last part needs more refining, like including the scripts that worked for it, since some models keep retrying many scripts to flash the Pro Mini where they didn't before. Ugh, such is LLM coding life.
 
-But that's basically it: I start an experiment, then 5 hours later (could be 5 minutes, could be 10, could be 15 — it depends) if I got what I want I conclude it. If I got nowhere, I say something like:
+But that's basically it: I start an experiment, then 5 hours later (could be 5 minutes, could be 10, could be 15, it depends) if I got what I want I conclude it. If I got nowhere, I say something like:
 
 ```
 Erase this Experiment completely, locally and from Github
 ```
 
-I did this only 3–4 times, unless there was something important — going SPI was important but proved to be a pain, so I simply called it failed, so it learns from it and doesn't waste time re-exploring failed paths.
+I did this only 3–4 times, unless there was something important, going SPI was important but proved to be a pain, so I simply called it failed, so it learns from it and doesn't waste time re-exploring failed paths.
 
 It only took 60 experiments over about 2 months 🫥, but hey, we're here and I'm using it right now. Yay!! 🎊
 
@@ -313,7 +313,7 @@ It only took 60 experiments over about 2 months 🫥, but hey, we're here and I'
 
 I found a random screwdriver cap works great as a "rim cap": I used baking powder and super glue to fill the gap so I could attach it to the TrackPoint. No cracks so far, and it turned out fine.
 
-And that's it — flash the firmware, pair the keyboard, and the nub now drives your cursor.
+And that's it, flash the firmware, pair the keyboard, and the nub now drives your cursor.
 
 ## Other Resources and Special Thanks
 
