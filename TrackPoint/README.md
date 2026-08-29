@@ -18,19 +18,19 @@ With ZMK.
 - [3. How it works](#3-how-it-works)
 - [4. Step 1: Getting the TrackPoint out](#4-step-1-getting-the-trackpoint-out)
 - [5. Step 2: Choosing the approach](#5-step-2-choosing-the-approach)
-    - [5.1 Software only](#51-software-only)
+    - [5.1 The software-only approach](#51-the-software-only-approach)
         - [5.1.1 Wiring](#511-wiring)
         - [5.1.2 The ZMK side](#512-the-zmk-side)
         - [5.1.3 Power curve](#513-power-curve)
         - [5.1.4 Known issues](#514-known-issues)
         - [5.1.5 Resources](#515-resources)
-    - [5.2 Co-processor](#52-co-processor)
+    - [5.2 The co-processor approach](#52-the-co-processor-approach)
         - [5.2.1 Bill of Materials](#521-bill-of-materials)
         - [5.2.2 Arduino Pro Mini](#522-arduino-pro-mini)
         - [5.2.3 ATtiny85](#523-attiny85)
         - [5.2.4 The ZMK side](#524-the-zmk-side)
         - [5.2.5 Known issues](#525-known-issues)
-    - [5.3 24-bit ADC (coming soon)](#53-24-bit-adc-coming-soon)
+    - [5.3 The 24-bit ADC approach (coming soon)](#53-the-24-bit-adc-approach-coming-soon)
         - [5.3.1 Concept](#531-concept)
         - [5.3.2 Status](#532-status)
         - [5.3.3 Known issues](#533-known-issues)
@@ -111,7 +111,7 @@ My take: if you have a nice_nano with two free GPIOs, **Software only** is the e
 
 Each approach below has its own wiring, flashing, ZMK steps, and known issues.
 
-### 5.1 Software only
+### 5.1 The software-only approach
 
 The simplest approach: wire the TrackPoint's PS/2 lines directly to the nice_nano and decode them right on the chip running ZMK, no co-processor.
 
@@ -190,7 +190,7 @@ These also point to possible causes:
 
 ---
 
-### 5.2 Co-processor
+### 5.2 The co-processor approach
 
 The approach I originally documented on this page: a small AVR sits between the TrackPoint and ZMK.
 
@@ -349,7 +349,7 @@ The cursor occasionally drifts in a random direction for about a second, then re
 
 ---
 
-### 5.3 24-bit ADC (coming soon)
+### 5.3 The 24-bit ADC approach (coming soon)
 
 > [!NOTE]
 > This solution is under development — the content below is a preview of the direction, not a finished guide.
