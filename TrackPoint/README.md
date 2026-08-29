@@ -22,9 +22,8 @@ With ZMK.
         - [5.1.1 Wiring](#511-wiring)
         - [5.1.2 The ZMK side](#512-the-zmk-side)
         - [5.1.3 Power curve](#513-power-curve)
-        - [5.1.4 Flashing & verifying](#514-flashing-verifying)
-        - [5.1.5 Known issues](#515-known-issues)
-        - [5.1.6 Resources](#516-resources)
+        - [5.1.4 Known issues](#514-known-issues)
+        - [5.1.5 Resources](#515-resources)
     - [5.2 Co-processor](#52-co-processor)
         - [5.2.1 Bill of Materials](#521-bill-of-materials)
         - [5.2.2 Arduino Pro Mini](#522-arduino-pro-mini)
@@ -171,11 +170,7 @@ tpoint0 {
 };
 ```
 
-#### 5.1.4 Flashing & verifying
-
-Build via GitHub Actions using `zmk-config-ps2-test` as a starting point, then flash the firmware to the nice_nano (see `AGENTS.md` in the knowledge repo for the headless bootloader entry + USB-logging recipe). Touch the nub and the cursor should move in all four directions naturally.
-
-#### 5.1.5 Known issues
+#### 5.1.4 Known issues
 
 The cursor occasionally drifts in a random direction for about a second, then returns to normal. It happens roughly once a day, and I haven't found the cause yet. This is the **same underlying issue as the Co-processor** (5.2) — it lives in the digital PS/2 decode path, not in any one implementation. Since both solutions share it, the details live here and 5.2 references them.
 
@@ -188,7 +183,7 @@ These also point to possible causes:
 - [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather vs on an AC set to 26c, there is merits to this.
 - [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying.
 
-#### 5.1.6 Resources
+#### 5.1.5 Resources
 
 - [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver)
 - [Config: `zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test)
@@ -348,7 +343,7 @@ Here's a closer look at the PCB:
 
 #### 5.2.5 Known issues
 
-The cursor occasionally drifts in a random direction for about a second, then returns to normal — the **same shared issue as Software only** (5.1). See [5.1.5's Known issues](#515-known-issues) for reproduction steps and suspected causes.
+The cursor occasionally drifts in a random direction for about a second, then returns to normal — the **same shared issue as Software only** (5.1). See [5.1.4's Known issues](#514-known-issues) for reproduction steps and suspected causes.
 
 ---
 
