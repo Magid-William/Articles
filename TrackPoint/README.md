@@ -11,6 +11,34 @@ With ZMK.
 > [!WARNING]
 > **Don't buy this module**, unless you already own one and want to reuse it in a wireless build, or you have no other way to source a TrackPoint. it has it's quirks and every now and then will move on it's own, For common TrackPoints with documented pinouts, see [alonswartz's pinout collection](https://github.com/alonswartz/trackpoint/tree/master/pinouts) or [Deskthority's list](https://deskthority.net/wiki/TrackPoint_Hardware).
 
+## Table of Contents
+
+- [Intro](#intro)
+- [Features](#features)
+- [How it works](#how-it-works)
+- [Choosing your approach](#choosing-your-approach)
+- [Step 1: Getting the TrackPoint out](#step-1-getting-the-trackpoint-out)
+- [Solution A: Software only](#solution-a-software-only)
+    - [Wiring](#wiring)
+    - [The ZMK side](#the-zmk-side)
+    - [Power curve](#power-curve)
+    - [Flashing & verifying](#flashing-verifying)
+    - [Known issues](#known-issues)
+    - [Resources](#resources)
+- [Solution B: Co-processor](#solution-b-co-processor)
+    - [Bill of Materials](#bill-of-materials)
+    - [Option A: Arduino Pro Mini](#option-a-arduino-pro-mini)
+    - [Option B: ATtiny85](#option-b-attiny85)
+    - [The ZMK side](#the-zmk-side-1)
+    - [Known issues](#known-issues-1)
+- [Solution C: 24-bit ADC (coming soon)](#solution-c-24-bit-adc-coming-soon)
+    - [Concept](#concept)
+    - [Status](#status)
+    - [Known issues](#known-issues-2)
+- [Using it](#using-it)
+    - [My dev workflow](#my-dev-workflow)
+- [Other Resources and Special Thanks](#other-resources-and-special-thanks)
+
 ## Features
 
 - **Mouse movement**, similar to the `layer-toggle` from `infused-kim`: by interacting with the TrackPoint you automatically switch to the `tp_layer` layer (where the mouse keys live), and after ~2 s of inactivity you automatically return to the default layer.
