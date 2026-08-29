@@ -1,6 +1,6 @@
 # Guide: Integrating a common USB TrackPoint with ZMK
 
-## 1.0.0 Intro
+## 1. Intro
 
 In this article I'm going to showcase how I integrated a Chinese generic USB TrackPoint like this one:
 
@@ -13,11 +13,11 @@ With ZMK.
 
 ## Table of Contents
 
-- [1.0.0 Intro](#100-intro)
+- [1. Intro](#1-intro)
 - [1.1 Features](#11-features)
 - [1.2 How it works](#12-how-it-works)
 - [1.3 Step 1: Getting the TrackPoint out](#13-step-1-getting-the-trackpoint-out)
-- [2.0.0 Step 2: Choosing the approach](#200-step-2-choosing-the-approach)
+- [2. Step 2: Choosing the approach](#2-step-2-choosing-the-approach)
     - [2.1 Software only](#21-software-only)
         - [2.1.1 Wiring](#211-wiring)
         - [2.1.2 The ZMK side](#212-the-zmk-side)
@@ -35,7 +35,7 @@ With ZMK.
         - [2.3.1 Concept](#231-concept)
         - [2.3.2 Status](#232-status)
         - [2.3.3 Known issues](#233-known-issues)
-- [3.0.0 Step 3: Using it](#300-step-3-using-it)
+- [3. Step 3: Using it](#3-step-3-using-it)
     - [3.1 My dev workflow](#31-my-dev-workflow)
 - [3.2 Other Resources and Special Thanks](#32-other-resources-and-special-thanks)
 
@@ -98,7 +98,7 @@ From left to right:
 
 ---
 
-## 2.0.0 Step 2: Choosing the approach
+## 2. Step 2: Choosing the approach
 
 | | **A: Software only** | **B: Co-processor** | **C: 24-bit ADC** |
 |---|---|---|---|
@@ -369,7 +369,7 @@ Expected: none of the PS/2 drift. Open items will be listed here as they're disc
 
 ---
 
-## 3.0.0 Step 3: Using it
+## 3. Step 3: Using it
 
 <img width="1600" alt="The finished keyboard with the TrackPoint" src="https://github.com/user-attachments/assets/405c1641-c9d2-41ea-a336-00711cb01071" />
 
