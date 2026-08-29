@@ -116,7 +116,7 @@ Each approach below has its own wiring, flashing, ZMK steps, and known issues.
 
 The simplest approach: wire the TrackPoint's PS/2 lines directly to the nice_nano and decode them right on the chip running ZMK, no co-processor.
 
-This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config.
+This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config.
 
 #### 5.1.1 Wiring
 
