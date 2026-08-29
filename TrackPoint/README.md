@@ -16,26 +16,26 @@ With ZMK.
 - [Intro](#intro)
 - [Features](#features)
 - [How it works](#how-it-works)
-- [Choosing your approach](#choosing-your-approach)
 - [Step 1: Getting the TrackPoint out](#step-1-getting-the-trackpoint-out)
-- [Solution A: Software only](#solution-a-software-only)
-    - [Wiring](#wiring)
-    - [The ZMK side](#the-zmk-side)
-    - [Power curve](#power-curve)
-    - [Flashing & verifying](#flashing-verifying)
-    - [Known issues](#known-issues)
-    - [Resources](#resources)
-- [Solution B: Co-processor](#solution-b-co-processor)
-    - [Bill of Materials](#bill-of-materials)
-    - [Option A: Arduino Pro Mini](#option-a-arduino-pro-mini)
-    - [Option B: ATtiny85](#option-b-attiny85)
-    - [The ZMK side](#the-zmk-side-1)
-    - [Known issues](#known-issues-1)
-- [Solution C: 24-bit ADC (coming soon)](#solution-c-24-bit-adc-coming-soon)
-    - [Concept](#concept)
-    - [Status](#status)
-    - [Known issues](#known-issues-2)
-- [Using it](#using-it)
+- [Step 2: Choosing the approach](#step-2-choosing-the-approach)
+    - [2.1 Software only](#21-software-only)
+        - [Wiring](#wiring)
+        - [The ZMK side](#the-zmk-side)
+        - [Power curve](#power-curve)
+        - [Flashing & verifying](#flashing-verifying)
+        - [Known issues](#known-issues)
+        - [Resources](#resources)
+    - [2.2 Co-processor](#22-co-processor)
+        - [Bill of Materials](#bill-of-materials)
+        - [2.2.1 Arduino Pro Mini](#221-arduino-pro-mini)
+        - [2.2.2 ATtiny85](#222-attiny85)
+        - [The ZMK side](#the-zmk-side-1)
+        - [Known issues](#known-issues-1)
+    - [2.3 24-bit ADC (coming soon)](#23-24-bit-adc-coming-soon)
+        - [Concept](#concept)
+        - [Status](#status)
+        - [Known issues](#known-issues-2)
+- [Step 3: Using it](#step-3-using-it)
     - [My dev workflow](#my-dev-workflow)
 - [Other Resources and Special Thanks](#other-resources-and-special-thanks)
 
@@ -56,20 +56,6 @@ The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (an
 - **A 24-bit ADC** — read the TrackPoint's analog output directly with a high-resolution ADC, bypassing the digital PS/2 stream entirely (coming soon).
 
 All three power the same ZMK features above. Pick your approach below.
-
-## Choosing your approach
-
-| | **A: Software only** | **B: Co-processor** | **C: 24-bit ADC** |
-|---|---|---|---|
-| **Complexity** | Lowest — just firmware | Medium — extra chip + wiring | Highest — analog conditioning |
-| **Extra hardware** | None | AVR (Pro Mini or ATtiny85) + sockets/programmer | ADC (TBD) |
-| **Power** | Best (no extra MCU) | 2nd (AVR draws mA) | TBD |
-| **Drift** | Intermittent ~1 s, shared since it's the PS/2 decode path | Same as A | Expected: none (no PS/2 decode) |
-| **Status** | Shipping (Exp68–75) | Shipping | Under development |
-
-My take: if you have a nice_nano with two free GPIOs, **Software only** is the easiest path to a working nub. **Co-processor** is the way to go if your board can't spare the pins alongside split/BLE duties, or you want the smallest, lowest-power sensor at the point of the nub. **24-bit ADC** is experimental and the one I'm most excited about, because it should finally kill the drift.
-
-Each approach below has its own wiring, flashing, ZMK steps, and known issues.
 
 ## Step 1: Getting the TrackPoint out
 
@@ -112,13 +98,27 @@ From left to right:
 
 ---
 
-## Solution A: Software only
+## Step 2: Choosing the approach
+
+| | **A: Software only** | **B: Co-processor** | **C: 24-bit ADC** |
+|---|---|---|---|
+| **Complexity** | Lowest — just firmware | Medium — extra chip + wiring | Highest — analog conditioning |
+| **Extra hardware** | None | AVR (Pro Mini or ATtiny85) + sockets/programmer | ADC (TBD) |
+| **Power** | Best (no extra MCU) | 2nd (AVR draws mA) | TBD |
+| **Drift** | Intermittent ~1 s, shared since it's the PS/2 decode path | Same as A | Expected: none (no PS/2 decode) |
+| **Status** | Shipping (Exp68–75) | Shipping | Under development |
+
+My take: if you have a nice_nano with two free GPIOs, **Software only** is the easiest path to a working nub. **Co-processor** is the way to go if your board can't spare the pins alongside split/BLE duties, or you want the smallest, lowest-power sensor at the point of the nub. **24-bit ADC** is experimental and the one I'm most excited about, because it should finally kill the drift.
+
+Each approach below has its own wiring, flashing, ZMK steps, and known issues.
+
+### 2.1 Software only
 
 The simplest approach: wire the TrackPoint's PS/2 lines directly to the nice_nano and decode them right on the chip running ZMK, no co-processor.
 
 This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config.
 
-### Wiring
+#### Wiring
 
 This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects every host command**, so the driver runs in a *never-send-commands* mode and just listens. Wire it directly to the nice_nano:
 
@@ -132,7 +132,7 @@ This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects
 
 > **Why the `gpio-ps2` backend?** This TrackPoint has a jittery RC clock. The driver's other backend (`uart-ps2`) samples at a fixed rate and can't follow it, producing decode glitches. The `gpio-ps2` backend samples DAT on real CLK falling edges — the same mechanism the AVR decoder used — and is jitter-immune.
 
-### The ZMK side
+#### The ZMK side
 
 Point ZMK's `west.yml` at the two repos above, enable the direct-PS/2 options in your board config, and add the device node:
 
@@ -156,7 +156,7 @@ The driver's README has the full reference. The key flags for this module, all o
 
 Also note the **axis are rotated** vs a normal keycap — push up reports as left. Fix it in ZMK config (not the driver) with a swap-only transform (`zmk,input-processor-transform`, `INPUT_TRANSFORM_XY_SWAP`).
 
-### Power curve
+#### Power curve
 
 The on-device Power curve gives the same "slow nudge crawls, fast flick accelerates" feel it previously had on the co-processor — now baked straight into the driver. Start with the verified tuning:
 
@@ -169,13 +169,13 @@ tpoint0 {
 };
 ```
 
-### Flashing & verifying
+#### Flashing & verifying
 
 Build via GitHub Actions using `zmk-config-ps2-test` as a starting point, then flash the firmware to the nice_nano (see `AGENTS.md` in the knowledge repo for the headless bootloader entry + USB-logging recipe). Touch the nub and the cursor should move in all four directions naturally.
 
-### Known issues
+#### Known issues
 
-The cursor occasionally drifts in a random direction for about a second, then returns to normal. It happens roughly once a day, and I haven't found the cause yet. This is the **same underlying issue as the Co-processor** (Solution B) — it lives in the digital PS/2 decode path, not in any one implementation. Since both solutions share it, the details live here and Solution B references them.
+The cursor occasionally drifts in a random direction for about a second, then returns to normal. It happens roughly once a day, and I haven't found the cause yet. This is the **same underlying issue as the Co-processor** (2.2) — it lives in the digital PS/2 decode path, not in any one implementation. Since both solutions share it, the details live here and 2.2 references them.
 
 Steps for repro:
 - Let's say you are scrolling down slowly, keep scrolling for a good 5 minutes.
@@ -186,14 +186,12 @@ These also point to possible causes:
 - [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather vs on an AC set to 26c, there is merits to this.
 - [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying.
 
-### Resources
+#### Resources
 
 - [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver)
 - [Config: `zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test)
 
----
-
-## Solution B: Co-processor
+### 2.2 Co-processor
 
 The approach I originally documented on this page: a small AVR sits between the TrackPoint and ZMK.
 
@@ -201,9 +199,9 @@ The approach I originally documented on this page: a small AVR sits between the 
 - It exposes the data as an I2C slave at address `0x42`.
 - ZMK's [`trackpoint-i2c` driver](https://github.com/Magid-William/attiny85-trackpoint) reads that I2C slave, triggered by the MOT data-ready line, not blind polling, and feeds the pointer into ZMK.
 
-Wire either an [Arduino Pro Mini](#option-a-arduino-pro-mini) or an [ATtiny85](#option-b-attiny85) as the co-processor.
+Wire either an [Arduino Pro Mini](#221-arduino-pro-mini) or an [ATtiny85](#222-attiny85) as the co-processor.
 
-### Bill of Materials
+#### Bill of Materials
 
 | Component                          | Quantity | Note                                                                                  |
 | ---------------------------------- | -------- | ------------------------------------------------------------------------------------- |
@@ -226,7 +224,7 @@ Tools:
 - Optional: an extra nRF52 board dedicated to testing
 - An LLM coding agent, if you need more features
 
-### Option A: Arduino Pro Mini
+#### 2.2.1 Arduino Pro Mini
 
 I had an Arduino Pro Mini lying around that I'd never used and wasn't sure why I bought. It ended up being a really good fit, but not right away: the Pro Mini has 2 things that consume power in idle:
 
@@ -250,7 +248,7 @@ Here's a diagram:
 | -          | A4       | P0.17           | Via 4.7K ohm resistor, connected to VCC |
 | -          | A5       | P0.20           | Via 4.7K ohm resistor, connected to VCC |
 
-### Flashing the Pro Mini
+##### Flashing the Pro Mini
 
 You can flash the Pro Mini using another Arduino (Arduino ISP or USB passthrough). Honestly, this is where you'll want to consult your favorite LLM.
 
@@ -263,18 +261,18 @@ For me it was a dedicated `CH340G` AVR programmer (which won't work with the ATt
 | GND      | GND    |
 | VCC      | VCC    |
 
-### Resources (Pro Mini)
+##### Resources (Pro Mini)
 
 - [Pro Mini sketch](https://github.com/Magid-William/promini-trackpoint/blob/master/trackpoint-i2c-slave/trackpoint-i2c-slave.ino) for reading PS/2 from the TrackPoint and interfacing over I2C
 - [Prebuilt hex](https://github.com/Magid-William/promini-trackpoint/releases/tag/Exp60) you can flash directly to the Pro Mini
 
-### Option B: ATtiny85
+#### 2.2.2 ATtiny85
 
 I thought the Pro Mini consumed too much power, so I asked an LLM and it suggested an ATtiny. I was able to source an ATtiny85 locally.
 
 Honestly, the ATtiny85 felt like a downgrade and I'd stick with the Pro Mini if I had to choose all over again. But if you prefer it, or have a form factor more like the ATtiny85, follow along.
 
-### Why I'd pick the Pro Mini over the ATtiny85
+##### Why I'd pick the Pro Mini over the ATtiny85
 
 The ATtiny85 works, but it's tight on every axis:
 
@@ -300,7 +298,7 @@ Here's the diagram again:
 
 The ATtiny85 setup differs from the Pro Mini in that it needs a `MOT` line. That's better than blind 10 ms polling, the `MOT` line made a huge difference to the smoothness of the ATtiny85's readings.
 
-### Flashing the ATtiny85
+##### Flashing the ATtiny85
 
 This is where another Arduino comes in, not the dedicated `CH340G`j like an Arduino Uno or the Leonardo I used, to flash the ATtiny. The wiring should be identical between them (I only tested with the Leonardo): typically you connect pins from the `ICSP` header to the ATtiny.
 
@@ -335,43 +333,43 @@ Here's a closer look at the PCB:
 
 </details>
 
-### Resources (ATtiny85)
+##### Resources (ATtiny85)
 
 - [The ATtiny85 sketch](https://github.com/Magid-William/attiny85-trackpoint/blob/main/trackpoint-i2c-slave-attiny85/trackpoint-i2c-slave-attiny85.ino) for reading PS/2 from the TrackPoint and interfacing over I2C
 - [Prebuilt hex](https://github.com/Magid-William/attiny85-trackpoint/releases/tag/EXP64) ready to be flashed
 
-### The ZMK side
+#### The ZMK side
 
 - [Here's the driver](https://github.com/Magid-William/zmk-trackpoint-driver), it holds the integration instructions.
 - [Shield example](https://github.com/Magid-William/zmk-trackpoint-shield)
 - [My personal shield](https://github.com/Magid-William/zmk-config-dabaseV_0-2), which uses a dongle
 
-### Known issues
+#### Known issues
 
-The cursor occasionally drifts in a random direction for about a second, then returns to normal — the **same shared issue as Software only** (Solution A). See [Solution A's Known issues](#known-issues) for reproduction steps and suspected causes.
+The cursor occasionally drifts in a random direction for about a second, then returns to normal — the **same shared issue as Software only** (2.1). See [2.1's Known issues](#known-issues) for reproduction steps and suspected causes.
 
 ---
 
-## Solution C: 24-bit ADC (coming soon)
+### 2.3 24-bit ADC (coming soon)
 
 > [!NOTE]
 > This solution is under development — the content below is a preview of the direction, not a finished guide.
 
-### Concept
+#### Concept
 
 Instead of decoding the TrackPoint's digital PS/2 stream (where the drift lives), read its analog output directly with a **24-bit ADC**. Because there's no PS/2 clock sampling and no byte/baseline decode to glitch, this has the **potential to eliminate the drift entirely** — the one open issue that Software only and the Co-processor still share.
 
-### Status
+#### Status
 
 Under development. Wiring, parts, and the ZMK integration are being worked out and will be added here.
 
-### Known issues
+#### Known issues
 
 Expected: none of the PS/2 drift. Open items will be listed here as they're discovered.
 
 ---
 
-## Using it
+## Step 3: Using it
 
 <img width="1600" alt="The finished keyboard with the TrackPoint" src="https://github.com/user-attachments/assets/405c1641-c9d2-41ea-a336-00711cb01071" />
 
