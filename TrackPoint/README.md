@@ -135,17 +135,9 @@ This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects
 
 #### 5.1.2 The ZMK side
 
-Point ZMK's `west.yml` at the two repos above, enable the direct-PS/2 options in your board config, and add the device node:
+Point ZMK at the `zmk-config-ps2-test` shield config above — it wires up the driver and enables everything needed, so there's no need to hand-write the device nodes here.
 
-```ini
-# board.conf
-CONFIG_ZMK_EXT_POWER=y
-CONFIG_INPUT_MOUSE_PS2_NO_HOST_COMMANDS=y     # this TP rejects all host commands
-CONFIG_PS2_GPIO_NO_RESEND=y                   # suppress 0xFE resend writes
-CONFIG_INPUT_THREAD_STACK_SIZE=4096           # stable split-role builds (see known issues)
-```
-
-The driver's README has the full reference. The key flags for this module, all opt-in (Exp75 made them default = stock):
+The key flags for this module:
 
 | Option | What it does for this TrackPoint |
 |--------|----------------------------|
