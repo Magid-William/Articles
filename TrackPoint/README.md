@@ -188,6 +188,8 @@ These also point to possible causes:
 - [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver)
 - [Config: `zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test)
 
+---
+
 ### 5.2 Co-processor
 
 The approach I originally documented on this page: a small AVR sits between the TrackPoint and ZMK.
