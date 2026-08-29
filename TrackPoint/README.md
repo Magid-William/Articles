@@ -118,6 +118,8 @@ The simplest approach: wire the TrackPoint's PS/2 lines directly to the nice_nan
 
 This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config.
 
+This effort is built on `infused-kim`'s work and stays compatible with it — everything in this section applies equally if you start from his driver and config.
+
 #### 5.1.1 Wiring
 
 This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects every host command**, so the driver runs in a *never-send-commands* mode and just listens. Wire it directly to the nice_nano:
