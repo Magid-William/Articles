@@ -51,7 +51,7 @@ With ZMK.
 The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (and it would drain battery decoding it). There are three ways to get around that, from simplest to most involved:
 
 - **Software only** — run the PS/2 decoder directly on the nice_nano. The trackpoint is wired straight to the MCU and decoded on the same chip running ZMK. Simplest, no extra hardware.
-- **A co-processor** — a small AVR (Arduino Pro Mini or ATtiny85) reads the TrackPoint over PS/2 and exposes the data over I2C to ZMK. The approach I'd already documented on this page.
+- **A co-processor** — a small AVR (Arduino Pro Mini or ATtiny85) reads the TrackPoint over PS/2 and exposes the data over I2C to ZMK. The I2C link is clean and standard, so this method behaves exactly like any ZMK pointing device (see [ZMK's pointing docs](https://web.archive.org/web/20260626150914/https://zmk.dev/docs/features/pointing)). This is the approach I'd already documented on this page.
 - **A 24-bit ADC** — read the TrackPoint's analog output directly with a high-resolution ADC, bypassing the digital PS/2 stream entirely (coming soon).
 
 All three power the same ZMK features above. Pick your approach below.
