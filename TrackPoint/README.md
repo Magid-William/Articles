@@ -117,7 +117,7 @@ The simplest approach: wire the TrackPoint's PS/2 lines directly to the nice_nan
 
 This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config.
 
-This effort is built on `badjeff`'s work and stays compatible with it — everything in this section applies equally if you start from his driver and config.
+This effort is built on `infused-kim`/`badjeff`'s work, stays compatible with it, and adds extra opt-in features (see the table below). Everything in this section applies equally if you start from their driver and config.
 
 #### 5.1.1 Wiring
 
