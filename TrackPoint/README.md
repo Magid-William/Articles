@@ -113,7 +113,10 @@ Each approach below has its own wiring, flashing, ZMK steps, and known issues.
 
 ### 5.1 The software-only approach
 
-The simplest approach: wire the TrackPoint's PS/2 lines directly to the nice_nano and decode them right on the chip running ZMK, no co-processor.
+<img width="1613" height="883" alt="image" src="https://github.com/user-attachments/assets/3de39843-1d70-4e69-9463-84205c43752c" />
+
+
+The simplest approach: wire the TrackPoint's PS/2 lines directly to the nicenano and decode them right on the chip running ZMK, no co-processor.
 
 This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config.
 
@@ -130,6 +133,8 @@ This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects
 | VCC | VCC (EXT_POWER P0.13 rail) | So deep sleep cuts the TrackPoint's power too |
 | GND | GND | |
 | RST | - | Leave float |
+
+> You don't need to add a pull up resistor, we are using the internal ones
 
 > **Why the `gpio-ps2` backend?** This TrackPoint has a jittery RC clock. The driver's other backend (`uart-ps2`) samples at a fixed rate and can't follow it, producing decode glitches. The `gpio-ps2` backend samples DAT on real CLK falling edges — the same mechanism the AVR decoder used — and is jitter-immune.
 
