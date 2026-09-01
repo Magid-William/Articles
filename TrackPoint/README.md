@@ -43,21 +43,21 @@ With ZMK.
 - **Mouse movement**, similar to the `layer-toggle` from `infused-kim`: by interacting with the TrackPoint you automatically switch to the `tp_layer` layer (where the mouse keys live), and after ~2 s of inactivity you automatically return to the default layer.
 - **Scrolling**, hold a key to switch to the `scroll_layer` and scroll vertically and horizontally with the nub. For me it's `J` on Colemak-DH (you'd probably use `Y` on QWERTY).
 - **Volume control**, same idea: hold `K` and use the nub to control the volume.
-- **Deep sleep**, native to ZMK; I encourage it as it saves battery. Personally I set it to 15 minutes.
-- **Power curve**, for controlling the smoothness of the mouse movement (I prefer it).
+- **Deep sleep**, native to ZMK; I encourage it as it saves battery. Personally I set it to 5 or 15 minutes.
+- **Power curve**, for controlling the smoothness of the mouse movement.
 
 ## 3. How it works
 
-The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (and it would drain battery decoding it). There are three ways to get around that, from simplest to most involved:
+The TrackPoint natively speaks PS/2, There are three ways to get around that, from simplest to most involved:
 
-- **Software only** — run the PS/2 decoder directly on the nice_nano. The trackpoint is wired straight to the MCU and decoded on the same chip running ZMK. Simplest, no extra hardware.
-- **A co-processor** — a small AVR (Arduino Pro Mini or ATtiny85) reads the TrackPoint over PS/2 and exposes the data over I2C to ZMK. The I2C link is clean and standard, so this method behaves exactly like any ZMK pointing device (see [ZMK's pointing docs](https://web.archive.org/web/20260626150914/https://zmk.dev/docs/features/pointing)). This is the approach I'd already documented on this page.
-- **A 24-bit ADC** — read the TrackPoint's analog output directly with a high-resolution ADC, bypassing the digital PS/2 stream entirely (coming soon).
+- **Software only** — run the PS/2 decoder directly on the nice_nano using the infusedkim ps/2 trackpoint driver, The trackpoint is wired straight to the MCU and decoded on the same chip running ZMK. Simplest, no extra hardware.
+- **A co-processor** — a small AVR (Arduino Pro Mini or ATtiny85) reads the TrackPoint over PS/2 and exposes the data over I2C to ZMK. The I2C link is clean and standard, so this method behaves exactly like any ZMK pointing device (see [ZMK's pointing docs](https://web.archive.org/web/20260626150914/https://zmk.dev/docs/features/pointing)). This is the approach Is better only if you need standard I2C for some reason.
+- **A 24-bit ADC** — read the TrackPoint's analog output directly with a high-resolution 24-bit ADC (ADS1231), bypassing the digital PS/2 stream entirely (coming soon).
 
 All three power the same ZMK features above. Pick your approach below.
 
 > [!NOTE]
-> **But** the co-processor has the highest battery cost of the three — see [5.2 The co-processor approach](#52-the-co-processor-approach).
+> **But** the co-processor approach has the highest battery cost of the three, see [5.2 The co-processor approach](#52-the-co-processor-approach).
 
 ## 4. Step 1: Getting the TrackPoint out
 
@@ -65,7 +65,7 @@ Regardless of approach, you first need to free the TrackPoint sensor from its US
 
 The USB TrackPoint consists of 2 parts:
 
-- The TrackPoint sensor (the smaller PCB)
+- The TrackPoint sensor (the smaller PCB that houses the sensor with the red cap)
 - A housing PCB that exposes the TrackPoint as USB
 
 We only need the TrackPoint sensor, so we'll de-solder it.
@@ -121,13 +121,11 @@ Each approach below has its own wiring, flashing, ZMK steps, and known issues.
 
 The simplest approach: wire the TrackPoint's PS/2 lines directly to the nicenano and decode them right on the chip running ZMK, no co-processor.
 
-This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config.
+This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config that is specific to this type of TrackPoint.
 
-This effort is built on `infused-kim`/`badjeff`'s work, stays compatible with it, and adds extra opt-in features (see the table below). Everything in this section applies equally if you start from their driver and config.
+This effort is built on `infused-kim`/`badjeff`'s work; stays compatible with it, and adds extra opt-in features (see the table below).
 
 #### 5.1.1 Wiring
-
-This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects every host command**, so the driver runs in a *never-send-commands* mode and just listens. Wire it directly to the nice_nano:
 
 | TrackPoint | Nice!Nano | Note |
 | ---------- | --------- | ---- |
@@ -143,7 +141,9 @@ This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects
 
 #### 5.1.2 The ZMK side
 
-Point ZMK at the `zmk-config-ps2-test` shield config above — it wires up the driver and enables everything needed, so there's no need to hand-write the device nodes here.
+This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects every host command**, so the driver runs in a *never-send-commands* mode and just listens. Wire it directly to the nice_nano
+
+The [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) shield is configured it wires up the [driver](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) and enables everything needed, use it for sanity.
 
 The key flags for this module:
 
@@ -155,11 +155,11 @@ The key flags for this module:
 | pull-ups (GPIO/UART) | the PS/2 lines need pull-ups (patched into the driver) |
 | `POWER_CURVE` | on-device Smoothness curve, see below |
 
-Also note the **axis are rotated** vs a normal keycap — push up reports as left. Fix it in ZMK config (not the driver) with a swap-only transform (`zmk,input-processor-transform`, `INPUT_TRANSFORM_XY_SWAP`).
+Also note the **axis are rotated** for my specific hardware orientation, to change them transform (`zmk,input-processor-transform`, `INPUT_TRANSFORM_XY_SWAP`).
 
 #### 5.1.3 Power curve
 
-The on-device Power curve gives the same "slow nudge crawls, fast flick accelerates" feel it previously had on the co-processor — now baked straight into the driver. Start with the verified tuning:
+The on-device Power curve gives the same "slow nudge crawls, fast flick accelerates" feel it previously had on the co-processor, it's baked straight into the driver. Start with the verified tuning:
 
 ```dts
 tpoint0 {
@@ -172,7 +172,7 @@ tpoint0 {
 
 #### 5.1.4 Known issues
 
-The cursor occasionally drifts in a random direction for about a second, then returns to normal. It happens roughly once a day, and I haven't found the cause yet. This is the **same underlying issue as the Co-processor** (5.2) — it lives in the digital PS/2 decode path, not in any one implementation. Since both solutions share it, the details live here and 5.2 references them.
+While not caused by the driver, the cursor occasionally drifts in a random direction for about a second, then returns to normal, I haven't found the cause yet. This is the **same underlying issue as wthe Co-processor**.
 
 Steps for repro:
 - Let's say you are scrolling down slowly, keep scrolling for a good 5 minutes.
@@ -180,8 +180,8 @@ Steps for repro:
 - lift your finger, and notice the mouse moving in a direction for 1sec or less then stops.
 
 These also point to possible causes:
-- [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather vs on an AC set to 26c, there is merits to this.
-- [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying.
+- [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather and high humidity vs on an AC set to 26c, there is merits to this.
+- [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying, although might wont be able to replicate thier solution as they may use reset host commands to reset the TrackPoint so it's not 1:1 solution i could replicate.
 
 #### 5.1.5 Resources
 
@@ -193,9 +193,9 @@ These also point to possible causes:
 ### 5.2 The co-processor approach
 
 > [!IMPORTANT]
-> **Battery cost:** the co-processor approach uses **~3x the battery** of the [software-only approach](#51-the-software-only-approach) — the AVR draws mA whenever the keyboard is on. In my measurements that was 3–4% per day (Pro Mini + TrackPoint) vs 1% per day software-only on the same battery, see [5.2.2](#522-arduino-pro-mini).
+> **Battery cost:** the co-processor approach uses **~3x the battery** of the [software-only approach](#51-the-software-only-approach), the AVR draws mA whenever the keyboard is on. In my measurements that was 3–4% per day (Pro Mini + TrackPoint) vs 1% per day software-only on the same battery, see [5.2.2](#522-arduino-pro-mini).
 
-The approach I originally documented on this page: a small AVR sits between the TrackPoint and ZMK.
+How it works: 
 
 - The co-processor reads X/Y movement from the TrackPoint over PS/2.
 - It exposes the data as an I2C slave at address `0x42`.
@@ -272,7 +272,7 @@ For me it was a dedicated `CH340G` AVR programmer (which won't work with the ATt
 
 I thought the Pro Mini consumed too much power, so I asked an LLM and it suggested an ATtiny. I was able to source an ATtiny85 locally.
 
-Honestly, the ATtiny85 felt like a downgrade and I'd stick with the Pro Mini if I had to choose all over again. But if you prefer it, or have a form factor more like the ATtiny85, follow along.
+For future experiment, i might try STM32L412 for lower power draw.
 
 ##### 5.2.3.1 Why I'd pick the Pro Mini over the ATtiny85
 
@@ -298,7 +298,7 @@ Here's the diagram again:
 | VCC        | 8        | VCC             |                       |
 | -          | 4 -> 8   | -               | Via 100nF capacitor   |
 
-The ATtiny85 setup differs from the Pro Mini in that it needs a `MOT` line. That's better than blind 10 ms polling, the `MOT` line made a huge difference to the smoothness of the ATtiny85's readings.
+The ATtiny85 setup differs from the Pro Mini in that it needs a `MOT` line. That's better than blind 10 ms polling, the `MOT` line made a huge difference to the smoothness of the ATtiny85's readings, using a MOT with the promini didnt show a noticeble difference.
 
 ##### 5.2.3.2 Flashing the ATtiny85
 
@@ -337,8 +337,8 @@ Here's a closer look at the PCB:
 
 ##### 5.2.3.3 Resources (ATtiny85)
 
-- [The ATtiny85 sketch](https://github.com/Magid-William/attiny85-trackpoint/blob/main/trackpoint-i2c-slave-attiny85/trackpoint-i2c-slave-attiny85.ino) for reading PS/2 from the TrackPoint and interfacing over I2C
-- [Prebuilt hex](https://github.com/Magid-William/attiny85-trackpoint/releases/tag/EXP64) ready to be flashed
+- [The ATtiny85 sketch](https://github.com/Magid-William/attiny85-trackpoint/blob/main/trackpoint-i2c-slave-attiny85/trackpoint-i2c-slave-attiny85.ino) for reading PS/2 from the TrackPoint and interfacing over I2C.
+- [Prebuilt hex](https://github.com/Magid-William/attiny85-trackpoint/releases/tag/EXP64) ready to be flashed.
 
 #### 5.2.4 The ZMK side
 
@@ -361,13 +361,13 @@ The cursor occasionally drifts in a random direction for about a second, then re
 
 Instead of decoding the TrackPoint's digital PS/2 stream (where the drift lives), read its analog output directly with a **24-bit ADC**. Because there's no PS/2 clock sampling and no byte/baseline decode to glitch, this has the **potential to eliminate the drift entirely** — the one open issue that Software only and the Co-processor still share.
 
+I have ordered the ADS1220 and planning on using it with this [driver](https://github.com/badjeff/ads1220-zephyr-module)
+
 #### 5.3.2 Status
 
 Under development. Wiring, parts, and the ZMK integration are being worked out and will be added here.
 
-#### 5.3.3 Known issues
-
-Expected: none of the PS/2 drift. Open items will be listed here as they're discovered.
+I Expect none of the PS/2 drift as im bypassing the IC's random calibration.
 
 ---
 
