@@ -56,6 +56,9 @@ The TrackPoint natively speaks PS/2, which the nRF52840 is not friendly with (an
 
 All three power the same ZMK features above. Pick your approach below.
 
+> [!NOTE]
+> **But** the co-processor has the highest battery cost of the three — see [5.2 The co-processor approach](#52-the-co-processor-approach).
+
 ## 4. Step 1: Getting the TrackPoint out
 
 Regardless of approach, you first need to free the TrackPoint sensor from its USB housing.
