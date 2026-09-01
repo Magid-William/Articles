@@ -103,7 +103,7 @@ From left to right:
 |---|---|---|---|
 | **Complexity** | Lowest — just firmware | Medium — extra chip + wiring | Highest — analog conditioning |
 | **Extra hardware** | None | AVR (Pro Mini or ATtiny85) + sockets/programmer | ADC (TBD) |
-| **Power** | Best (no extra MCU) | 2nd (AVR draws mA) | TBD |
+| **Power** | Best (no extra MCU) | ~3x software-only (AVR draws mA) | TBD |
 | **Drift** | Intermittent ~1 s, shared since it's the PS/2 decode path | Same as A | Expected: none (no PS/2 decode) |
 | **Status** | Shipping (Exp68–75) | Shipping | Under development |
 
@@ -189,6 +189,9 @@ These also point to possible causes:
 
 ### 5.2 The co-processor approach
 
+> [!IMPORTANT]
+> **Battery cost:** the co-processor approach uses **~3x the battery** of the [software-only approach](#51-the-software-only-approach) — the AVR draws mA whenever the keyboard is on. In my measurements that was 3–4% per day (Pro Mini + TrackPoint) vs 1% per day software-only on the same battery, see [5.2.2](#522-arduino-pro-mini).
+
 The approach I originally documented on this page: a small AVR sits between the TrackPoint and ZMK.
 
 - The co-processor reads X/Y movement from the TrackPoint over PS/2.
@@ -230,7 +233,7 @@ I had an Arduino Pro Mini lying around that I'd never used and wasn't sure why I
 <img width="324" alt="Pro Mini: power regulator and LED highlighted" src="https://github.com/user-attachments/assets/e335690b-8658-4126-82c5-9f5a59557286" />
 
 De-solder them and you get a very solid co-processor (it's okay to break the led with a plier). 
-I used the Pro Mini for a week and it + the TrackPoint consumed about 3–4% per day on a 1050 mAh battery (BL-5B Nokia replacement battery) compared to 1% per day for the left side with the same battery.
+I used the Pro Mini for a week and it + the TrackPoint consumed about 3–4% per day on a 1050 mAh battery (BL-5B Nokia replacement battery) compared to 1% per day for the left side with the same battery — i.e. **~3x the battery usage** of the software-only approach.
 
 Here's a diagram:
 
