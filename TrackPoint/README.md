@@ -375,6 +375,14 @@ I Expect none of the PS/2 drift as im bypassing the IC's random calibration.
 
 <img width="1600" alt="The finished keyboard with the TrackPoint" src="https://github.com/user-attachments/assets/405c1641-c9d2-41ea-a336-00711cb01071" />
 
+<summary>More images</summary>
+
+<img width="1081" height="1280" alt="image" src="https://github.com/user-attachments/assets/a8a76ac9-806c-48ee-84ff-6571704a104a" />
+<img width="1025" height="1280" alt="image" src="https://github.com/user-attachments/assets/c1350b13-97ef-499a-85d0-cfae7a9a2e6f" />
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/397a2910-5422-4472-8951-cb25c26f9e0a" />
+
+</details>
+
 I found a random screwdriver cap works great as a "rim cap": I used baking powder and super glue to fill the gap so I could attach it to the TrackPoint. No cracks so far, and it turned out fine.
 
 And that's it, flash the firmware, pair the keyboard, and the nub now drives your cursor.
