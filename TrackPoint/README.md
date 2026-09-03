@@ -375,6 +375,8 @@ I Expect none of the PS/2 drift as im bypassing the IC's random calibration.
 
 <img width="1600" alt="The finished keyboard with the TrackPoint" src="https://github.com/user-attachments/assets/405c1641-c9d2-41ea-a336-00711cb01071" />
 
+<details>
+	
 <summary>More images</summary>
 
 <img width="1081" height="1280" alt="image" src="https://github.com/user-attachments/assets/a8a76ac9-806c-48ee-84ff-6571704a104a" />
