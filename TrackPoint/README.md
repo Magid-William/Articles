@@ -172,6 +172,10 @@ tpoint0 {
 
 #### 5.1.4 Known issues
 
+**Issue 1:**
+One unique quirk with this approach with this specific TP module is that PS/2 over GPIO interrupts is fragile by design. The nRF samples DAT on every CLK falling edge (~14k edges/s), and a single delayed edge under load (BLE/USB/workqueue) = one bad bit = a frame that still squeaks past PS/2's weak parity + stop-bit check = one bogus full-scale delta = a random cursor jump. It's the exact failure mode infused-kim [documents](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#i-realized-the-microcontroller-was-too-slow-for-the-trackpoint-:~:text=This%20meant%20that%20my%20driver%20wasn%27t%20able%20to%20%22catch%22%20all%20of%20the%20bits%20the%20TrackPoint%20was%20sending.) as the reason he built the UART-trick as a hardware offload, using the UART-trick is still under investigation.
+
+**Issue2:**
 While not caused by the driver, the cursor occasionally drifts in a random direction for about a second, then returns to normal, I haven't found the cause yet. This is the **same underlying issue as wthe Co-processor**.
 
 Steps for repro:
