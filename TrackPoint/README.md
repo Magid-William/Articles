@@ -177,10 +177,13 @@ One unique quirk with this approach with this specific TP module is that PS/2 ov
 
 Update 2026-09-04:  
 I had no luck using UART on 9600, 14400 and 19200 rate, this means GPIO is the only viable driver for this TP module.
+
+I "can" live with the GPIO performance, but i might move to the coprocessor approach, or even the ADC approach both had/will-have clean movement than the GPIO
+
 <details>
 
 <summary>
-you can check my attempts here	
+Check my attempts here	
 </summary>
 
 
@@ -231,7 +234,16 @@ These also point to possible causes:
 > [!IMPORTANT]
 > **Battery cost:** the co-processor approach uses **~3x the battery** of the [software-only approach](#51-the-software-only-approach), the AVR draws mA whenever the keyboard is on. In my measurements that was 3–4% per day (Pro Mini + TrackPoint) vs 1% per day software-only on the same battery, see [5.2.2](#522-arduino-pro-mini).
 
-How it works: 
+**Why?**  
+The software only would have been my only choice.  
+It has 2 approaches the first GPIO (the one that works), and the much better UART (the one that didn't work for this TP).  
+The GPIO performance has this weird hiccups every now and then, it's very pronounced when you really don't want it to happen, like pressing `Ok`; the hiccup happens and you'd press `Cancel`.  
+[@infusedkim did talk about it](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#341-choose-the-ps2-driver-uart-vs-gpio) and we are basically unlucky in this regard.
+
+Therefore this approach was approachable, I already had the hardware and it's performance was really good.
+
+
+**How it works:**  
 
 - The co-processor reads X/Y movement from the TrackPoint over PS/2.
 - It exposes the data as an I2C slave at address `0x42`.
