@@ -175,6 +175,38 @@ tpoint0 {
 **Issue 1:**  
 One unique quirk with this approach with this specific TP module is that PS/2 over GPIO interrupts is fragile by design. The nRF samples DAT on every CLK falling edge (~14k edges/s), and a single delayed edge under load (BLE/USB/workqueue) = one bad bit = a frame that still squeaks past PS/2's weak parity + stop-bit check = one bogus full-scale delta = a random cursor jump. It's the exact failure mode infused-kim [documents](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#i-realized-the-microcontroller-was-too-slow-for-the-trackpoint-:~:text=This%20meant%20that%20my%20driver%20wasn%27t%20able%20to%20%22catch%22%20all%20of%20the%20bits%20the%20TrackPoint%20was%20sending.) as the reason he built the UART-trick as a hardware offload, using the UART-trick is still under investigation.
 
+Update 2026-09-04:  
+I had no luck using UART on 9600, 14400 and 19200 rate, this means GPIO is the only viable driver for this TP module.
+<details>
+
+<summary>
+you can check my attempts here	
+</summary>
+
+
+**Core — PS/2-via-UART decode (the direct lineage):**
+| Exp | What |
+|---|---|
+| [**Exp68**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp68/Exp68.md) | uart-ps2 backend @ **9600** (phase-walk garbage) and **14400** (real decode but 50/50 erratic) → **abandoned for gpio-ps2**. The origin of the uart-vs-gpio decision. |
+| [**Exp78**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp78/Exp78.md) | uart-ps2 @ **19200** (untried rate, tested clean, worst result) + **14400 A/B** on the modern fork (~55% aborts) → **FAILED, closes the uart-ps2 story for this TP**. |
+
+**Serial/UART debugging infrastructure (the 9600-baud AVR side):**
+| Exp | What |
+|---|---|
+| [**Exp13**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp13/Exp13.md) | CH340G USB-TTL (UART) programmer for the Pro Mini; avrdude @ 57600 bootloader baud. |
+| [**Exp38**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp38/Exp38.md) | `SERIAL_LOG` compile-time serial logging on the Pro Mini (wake/sleep only). |
+| [**Exp46**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp46/Exp46.md) | Bare serial tests @ 9600; **discovered 115200→9600** (8 MHz AVR baud error); raw PS/2 byte stream via CH340G. |
+| [**Exp52**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp52/Exp52.md) | ATtiny85 bare `Serial.println(millis())` @ 9600, read back via CH340G. |
+| [**Exp53**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp53/Exp53.md) | Same, read through the Leonardo SoftwareSerial bridge (USB CDC). |
+| [**Exp54**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp54/Exp54.md) | ATtiny85 PS/2 serial **X/Y reader** @ 9600 via the Leonardo bridge. |
+
+**Logging transport (UART as console backend):**
+| Exp | What |
+|---|---|
+| [**Exp70**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp70/Exp70.md) | `LOG_BACKEND_UART=y` + dropping `LOG_PRINTK` = why logs were invisible; also adaptive DTR/RTS shell probing over USB CDC. |
+
+</details>
+
 **Issue2:**  
 While not caused by the driver, the cursor occasionally drifts in a random direction for about a second, then returns to normal, I haven't found the cause yet. This is the **same underlying issue as wthe Co-processor**.
 
