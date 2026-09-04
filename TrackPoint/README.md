@@ -235,10 +235,9 @@ These also point to possible causes:
 > **Battery cost:** the co-processor approach uses **~3x the battery** of the [software-only approach](#51-the-software-only-approach), the AVR draws mA whenever the keyboard is on. In my measurements that was 3–4% per day (Pro Mini + TrackPoint) vs 1% per day software-only on the same battery, see [5.2.2](#522-arduino-pro-mini).
 
 **Why?**  
-The software only would have been my only choice.  
-It has 2 approaches the first GPIO (the one that works), and the much better UART (the one that didn't work for this TP).  
+The software only would have been my only choice, It has 2 approaches the first GPIO (the one that worked with this TP), and the much better UART (the one that didn't work for this TP).  
 The GPIO performance has this weird hiccups every now and then, it's very pronounced when you really don't want it to happen, like pressing `Ok`; the hiccup happens and you'd press `Cancel`.  
-[@infusedkim did talk about it](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#341-choose-the-ps2-driver-uart-vs-gpio) and we are basically unlucky in this regard.
+[@infusedkim did talk about it](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#341-choose-the-ps2-driver-uart-vs-gpio) this TP is basically unlucky in this regard.
 
 Therefore this approach was approachable, I already had the hardware and it's performance was really good.
 
