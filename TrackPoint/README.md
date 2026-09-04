@@ -239,7 +239,7 @@ The software only would have been my only choice, It has 2 approaches the first 
 The GPIO performance has this weird hiccups every now and then, it's very pronounced when you really don't want it to happen, like pressing `Ok`; the hiccup happens and you'd press `Cancel`.  
 [@infusedkim did talk about it](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#341-choose-the-ps2-driver-uart-vs-gpio) this TP is basically unlucky in this regard.
 
-Therefore this approach was approachable, I already had the hardware and it's performance was really good.
+Therefore this approach was approachable to me, I already had the hardware parts and it's performance was really good.
 
 
 **How it works:**  
