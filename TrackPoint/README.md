@@ -143,7 +143,7 @@ This effort is built on `infused-kim`/`badjeff`'s work; stays compatible with it
 
 This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects every host command**, so the driver runs in a *never-send-commands* mode and just listens. Wire it directly to the nice_nano
 
-The [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) shield is configured it wires up the [driver](https://github.com/Magid-William/zmk-ps2-trackpoint-driver) and enables everything needed, use it for sanity.
+The [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) shield is configured it wires up the [driver](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp77) and enables everything needed, use it for sanity.
 
 The key flags for this module:
 
@@ -224,7 +224,7 @@ These also point to possible causes:
 
 #### 5.1.5 Resources
 
-- [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver)
+- [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp77)
 - [Config: `zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test)
 
 ---
