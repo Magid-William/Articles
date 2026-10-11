@@ -406,7 +406,7 @@ The cursor occasionally drifts in a random direction for about a second, then re
 
 #### 5.3.1 Concept
 
-Instead of decoding the TrackPoint's digital PS/2 stream (where the drift lives), read its analog output directly with a **24-bit ADC**. Because there's no PS/2 clock sampling and no byte/baseline decode to glitch, this has the **potential to eliminate the drift entirely** — the one open issue that Software only and the Co-processor still share.
+The previous 2 approaches had one issue in common, the TP itself has an IC that does calibration that is annoying (i refer to it as the drift), by reading its analog output directly with a **24-bit ADC** ill bypass the IC and it's calibration altogether, this has the **potential to eliminate the drift entirely**.
 
 I have ordered the ADS1220 and planning on using it with this [driver](https://github.com/badjeff/ads1220-zephyr-module)
 
@@ -414,7 +414,7 @@ I have ordered the ADS1220 and planning on using it with this [driver](https://g
 
 Under development. Wiring, parts, and the ZMK integration are being worked out and will be added here.
 
-I Expect none of the PS/2 drift as im bypassing the IC's random calibration.
+I Expect none of the drift as im bypassing the IC's random calibration.
 
 ---
 
