@@ -220,7 +220,7 @@ Steps for repro:
 
 These also point to possible causes:
 - [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather and high humidity vs on an AC set to 26c, there is merits to this.
-- [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying, although might wont be able to replicate thier solution as they may use reset host commands to reset the TrackPoint so it's not 1:1 solution i could replicate.
+- [UHK had the same issue](https://github.com/UltimateHackingKeyboard/firmware/issues/382) worth studying, for this TP refusing reset commands i probably wont be able to replicate their solution as they may use reset host commands to reset the TrackPoint so it's not 1:1 solution i could replicate.
 
 #### 5.1.5 Resources
 
