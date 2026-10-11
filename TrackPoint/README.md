@@ -77,7 +77,7 @@ We only need the TrackPoint sensor, so we'll de-solder it.
 
 To de-solder it safely, cover the pins with flux and extra solder and use at least `250 °C` on the iron. By covering the pins you thermally interface with all of them at once.
 
-One pin that seemed tricky was the `GND` pin, the leftmost one. It seems to be soldered with a different solder material than the rest, and I'm not sure why. I'm guessing more temperature helps, maybe even more flux.
+The leftmost GND pin was tricky because the ground plane acts as a heat sink, making it harder to reach the solder’s melting point (h/t [@diecuriousdnd](https://github.com/diecuriousdnd) on [discord](https://discord.com/channels/719497620560543766/845285481888743434/1558826414088650753)). I'm guessing more temperature helps, maybe even more flux.
 
 Here's the pin mapping:
 
