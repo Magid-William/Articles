@@ -216,7 +216,7 @@ While not caused by the driver, the cursor occasionally drifts in a random direc
 Steps for repro:
 - Let's say you are scrolling down slowly, keep scrolling for a good 5 minutes.
 - During the 5 minutes you will sense resistance.
-- lift your finger, and notice the mouse moving in a direction for 1sec or less then stops.
+- lift your finger, and notice the mouse moving on it's own in a direction for 1sec or less then stops.
 
 These also point to possible causes:
 - [Maybe it's the heat](https://forums.tomsguide.com/threads/my-cursor-is-drifting-across-the-screen-again-and-sometimes-becomes-completely-unresponsive.352134/?order=vote_score), in my +38c weather and high humidity vs on an AC set to 26c, there is merits to this.
