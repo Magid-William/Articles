@@ -211,7 +211,7 @@ Check my attempts here
 </details>
 
 **Issue2:**  
-While not caused by the driver, the cursor occasionally drifts in a random direction for about a second, then returns to normal, I haven't found the cause yet. This is the **same underlying issue as wthe Co-processor**.
+While not caused by the driver, the cursor occasionally drifts in a random direction for about a second, then returns to normal, I haven't found the cause yet. This is the **same underlying issue as with Co-processor**.
 
 Steps for repro:
 - Let's say you are scrolling down slowly, keep scrolling for a good 5 minutes.
