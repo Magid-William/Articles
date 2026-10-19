@@ -165,7 +165,7 @@ Components & wiring
 ```
 </details>
 
-## Usage example:
+## Usage example (first 9 rows shown):
 
 | #  | +  | -  | A  | B  | C  | D  | E  |----| F  | G  | H  | I  | J  | +  | -  |
 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
@@ -238,3 +238,18 @@ Table 2:
 
 Otherwise you'd be getting badly formatted table that looks fine in the preview but not in the editor, 
 you'd be spending time correcting the formatting, so the prompt is trying to save you time.
+
+## OpenCode skill
+
+The prompt is also packaged as an OpenCode skill in [`breadboard-wiring/`](./breadboard-wiring/).
+It adds board profiles for the 170, 400, and 830 point boards, blank templates,
+complete LED examples, and a generator/validator:
+
+```sh
+python breadboard-wiring/scripts/breadboard.py new --board 830
+python breadboard-wiring/scripts/breadboard.py validate --board 830 my-table.md
+```
+
+The validator checks the row count, 4-character cells, 81-character lines,
+rail pattern, reference pairing, `Location` spans, and shorts. See the
+[skill README](./breadboard-wiring/README.md) for installation and use.
