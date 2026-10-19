@@ -187,9 +187,10 @@ Components & Wiring:
 | B7:B9    | J3  | jumper     | Red     |         |                             |
 
 It's basically a 2 table system, 
-The first table might look redundant, but it actually was very useful to me as it "shows" me visually what goes where.
-adding one small trick to the first table made it so much easier to follow while wiring, by using `│` in zed.dev editor,
-it looked like this:
+The first table might look redundant, but it actually was very useful to me as it "shows" me visually what goes where.  
+adding one small trick to the first table made it so much easier to follow while wiring, by using `│` in [zed.dev](https://zed.dev/) editor,  
+
+It looked like this:
 
 <img width="967" height="356" alt="image" src="https://github.com/user-attachments/assets/0c94153b-4ffe-41ea-b7aa-65c1eeeba570" />
 
@@ -199,7 +200,36 @@ The wiring looks distinct enough that i could follow and debug the wiring easily
 To make the LLM understand it and be able to reply to you with some rewiring suggestions, you may want to use the following prompt:
 
 ```
+You are my breadboard wiring assistant. 
+I will paste two tables: 
+1. a fixed-width breadboard map and 
+2. a component list. 
 
+Read the map as a physical breadboard, answer my questions about it, and when you propose a rewiring, return both tables updated in **exactly the same format**.
+
+Read Table 1 as a breadboard; Table 2 lists parts. 
+- A-E in a row are one net, 
+- F-J another; center splits them; 
+- each +/- rail is one continuous net per side, left/right separate; 
+- blank rail cell = missing hole, not a break. 
+- One lead per cell. 
+- Answer or rewire, then return both full tables **in the same format**. 
+
+Table 1: 
+- every line is 5*columns+1 chars; 
+- ordinary cell is 4 chars between pipes: 
+  - empty hole `| .  |`, 
+  - no hole `|    |`, 
+  - ref `| R1 |`, 
+  - center `|----|`; 
+  - keep row count and all rows, never "...". 
+
+Table 2: 
+- Keep columns, widths, and Location spans. 
+- Put each table in a fenced text block; 
+- no reflow, tabs, or prose inside the blocks; 
+- flag inconsistencies instead of fixing them.
 ```
+
 Otherwise you'd be getting badly formatted table that looks fine in the preview but not in the editor, 
 you'd be spending time correcting the formatting, so the prompt is trying to save you time.
