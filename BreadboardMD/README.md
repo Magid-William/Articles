@@ -1,3 +1,6 @@
+<img width="1376" height="768" alt="Gemini_Generated_Image_546m3g546m3g546m" src="https://github.com/user-attachments/assets/78d866cf-8bf9-4487-9cf0-7f342ad9a101" />
+
+
 I wanted to communicate my breadboard wiring to the LLMs, and this is my current approach:
 
 ## Breadboard:
