@@ -205,7 +205,9 @@ I will paste two tables:
 1. a fixed-width breadboard map and 
 2. a component list. 
 
-Read the map as a physical breadboard, answer my questions about it, and when you propose a rewiring, return both tables updated in **exactly the same format**.
+Read the map as a physical breadboard, answer my questions about it, 
+and when you propose a rewiring, 
+return both tables updated in **exactly the same format**.
 
 Read Table 1 as a breadboard; Table 2 lists parts. 
 - A-E in a row are one net, 
