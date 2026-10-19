@@ -1,116 +1,71 @@
 # Format contract
 
-The first table is a fixed-width ASCII drawing, not a normal Markdown table.
-Spaces carry meaning. A Markdown formatter that reflows it has broken it.
+Table 1 is a fixed-width ASCII drawing. Spaces are data; do not reflow it.
 
-## Table 1: breadboard map
+## Table 1 cells
 
-Every ordinary cell is exactly four characters between pipes:
+Every ordinary cell is exactly 4 characters between pipes:
 
 ```text
 | .  |    | R1 | 01 |
 ```
 
-That is:
+- empty hole: `| .  |` (space, dot, two spaces);
+- no hole: `|    |` (four spaces);
+- occupied: `| R1 |`;
+- row number: `| 01 |`;
+- header: `| #  |`, `| A  |`.
 
-- empty hole: one space, a dot, two spaces;
-- no hole: four spaces;
-- occupied by a reference: one space, the reference, padding to two
-  characters, one space;
-- row number: one space, two digits, one space;
-- header: the same rule, e.g. `| #  |`, `| A  |`.
+The center cell is always `|----|` (four hyphens, no spaces).
+16 columns -> 17 pipes, 81 characters; 12 columns -> 13 pipes, 61 characters.
 
-The center-channel cell is the exception and is always exactly `|----|`
-(four hyphens, no spaces).
-
-The header, separator, and every data row have one cell per table column.
-For a 16-column board that is 17 pipes and 81 characters per line. For the
-12-column 170 board it is 13 pipes and 61 characters per line.
-
-### 170 header
+### Headers
 
 ```text
 | #  | A  | B  | C  | D  | E  |----| F  | G  | H  | I  | J  |
 |----|----|----|----|----|----|----|----|----|----|----|----|
 ```
 
-### 400 / 830 header
-
 ```text
 | #  | +  | -  | A  | B  | C  | D  | E  |----| F  | G  | H  | I  | J  | +  | -  |
 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
 ```
 
-### Data rows
+### Data rules
 
-- Keep the row count for the profile; do not omit or add rows.
-- Number rows `01`-`17`, `01`-`30`, or `01`-`63`, depending on the board.
-- Never abbreviate with `...` or "rest unchanged".
-- A terminal cell is `.` or a reference. It is never blank.
-- A rail cell is `.` or a reference on a rail row, and blank otherwise.
-- The center cell is `----` on every data row.
-- A cell holds one lead. Use another free hole on the same net instead of
-  putting two references in one cell.
-- References are 1-2 characters: `R1`, `J2`, `D1`, `P1`. Use `RA`, `RB`, ...
-  rather than widening a cell if you run past `R9`.
+Keep every row for the profile, numbered `01`-`N`; never use `...`. Terminal
+cells are `.` or a reference; rail cells are `.` or a reference on rail rows
+and blank otherwise; center cells are `----`. One lead per cell: use another
+free hole on the same net if occupied. References are 1-2 characters (`R1`,
+`J2`, `P1`); use `RA`, `RB`, ... past `R9` instead of widening a cell.
 
-## Table 2: components and wiring
-
-Use exactly these six columns and content widths:
+## Table 2
 
 ```text
 | Location | Ref | Components | Value   | Reading | Note                        |
 | -------- | --- | ---------- | ------- | ------- | --------------------------- |
 ```
 
-Content widths are 8, 3, 10, 7, 7, and 27 characters. With one padding space
-on each side of every cell, the full line is 81 characters.
+Content widths: 8, 3, 10, 7, 7, 27. Full line: 81 characters.
 
-- `Location` is the pair of endpoint holes: `G1:G4`, `R+3:F3`, `D5:L-5`.
-- For a 2-pin part, Table 1 contains the reference at exactly two holes matching
-  those endpoints.
-- Keep existing rows in order and keep existing references unchanged unless
-  the user asks.
-- Leave `Reading` blank unless the user provides a value.
-- Keep notes short enough for 27 characters. Put longer explanations below the
-  table, not in the cell.
-- Do not invent readings or values.
+- `Location` is the two endpoints: `G1:G4`, `R+3:F3`, `D5:L-5`.
+- Each 2-pin reference appears exactly twice in Table 1, at those endpoints.
+- Keep rows and refs in their existing order.
+- Leave `Reading` blank unless supplied; do not invent values.
+- Keep notes within 27 characters; put longer text below the table.
 
 ### Rail coordinates
 
-Write rail endpoints as side + polarity + row:
+`L+3` = left `+` row 03; `L-5` = left `-` row 05;
+`R+3` = right `+` row 03; `R-6` = right `-` row 06.
 
-- `L+3` = left `+` rail, row 03.
-- `L-5` = left `-` rail, row 05.
-- `R+3` = right `+` rail, row 03.
-- `R-6` = right `-` rail, row 06.
+## Output
 
-The first table does not label the side of a rail; the column position does.
-Table 2 uses the `L` / `R` prefix to disambiguate.
+Return both complete tables in fenced `text` blocks, with no commentary inside.
+Use ASCII spaces only; no tabs, non-breaking spaces, or smart quotes. Keep `│`
+out of the canonical table; for the Zed view, make a separate display copy.
+Flag inconsistencies instead of silently fixing them.
 
-## Output rules
-
-- Return both complete tables. Do not return only changed rows.
-- Put each table in its own fenced `text` block.
-- Do not put commentary inside the code blocks.
-- Use ASCII spaces only: no tabs, no non-breaking spaces, no smart quotes.
-- Do not use `│` in the canonical table. If the user asks for the Zed view,
-  produce a separate display-only copy with only the `|` delimiters replaced
-  by `│`.
-- Flag inconsistencies instead of silently fixing them.
-
-## Common mistakes
-
-1. Reflowing the table to the longest cell. The cells are fixed at 4 characters.
-2. Using `| . |` or `|  . |` instead of `| .  |`.
-3. Using `| R1|` or `|R1 |` instead of `| R1 |`.
-4. Forgetting the center cell or writing `| -- |` instead of `|----|`.
-5. Truncating a 63-row table to 9 rows or using `...`.
-6. Treating a blank rail row as a break in the rail bus.
-7. Assuming `A1` and `A2` are connected because they share a column. They are
-   different rows and different nets.
-8. Putting two references in one cell instead of using another free hole on
-   the same net.
-9. Using `│` in the table that gets pasted back into the editor.
-10. Writing a `Location` span that disagrees with the two reference cells in
-    Table 1.
+Common mistakes: reflowing cells; `| . |` instead of `| .  |`; missing
+`|----|`; truncating rows; treating a rail gap as a break; assuming `A1` and
+`A2` connect; two refs in one cell; using `│` in the saved table.
