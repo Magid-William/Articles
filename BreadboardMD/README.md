@@ -191,7 +191,8 @@ The first table might look redundant, but it actually was very useful to me as i
 adding one small trick to the first table made it so much easier to follow while wiring, by using `│` in zed.dev editor,
 it looked like this:
 
-<img width="993" height="366" alt="image" src="https://github.com/user-attachments/assets/addbf9a2-2f19-4831-bbc4-3f10ceb3b226" />
+<img width="967" height="356" alt="image" src="https://github.com/user-attachments/assets/0c94153b-4ffe-41ea-b7aa-65c1eeeba570" />
+
 
 The wiring looks distinct enough that i could follow and debug the wiring easily.
 
