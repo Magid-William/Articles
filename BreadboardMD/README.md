@@ -148,6 +148,21 @@ I wanted to communicate my breadboard wiring to the LLMs, and this is my current
   ```
 </details>
 
+<details>
+
+<summary>
+Components & wiring  
+</summary>
+
+```
+| Location | Ref | Components | Value   | Reading | Note                        |
+| -------- | --- | ---------- | ------- | ------- | --------------------------- |
+|          |     |            |         |         |                             |
+|          |     |            |         |         |                             |
+|          |     |            |         |         |                             |
+```
+</details>
+
 ## Usage example:
 
 | #  | +  | -  | A  | B  | C  | D  | E  |----| F  | G  | H  | I  | J  | +  | -  |
