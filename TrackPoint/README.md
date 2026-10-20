@@ -141,7 +141,6 @@ This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects
 
 The [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) shield is configured it wires up the [driver](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp80) and enables everything needed, use it for sanity, but here's [my personal shell](https://github.com/Magid-William/zmk-config-dabaseV_0-2/tree/Exp80) that was tested daily.
 
-
 This effort is built on `infused-kim`/`badjeff`'s work; stays compatible with it, and adds extra opt-in features (see the table below):
 
 | Option | What it does for this TrackPoint |
@@ -166,6 +165,13 @@ mine look like this:
   ├─┘        │               │
   └──────────────────────────┘
 ```
+
+Here's my battery usage, the right one is the one with the TP:
+
+I'm using a dongle topology, and [using this tool](https://github.com/kot149/zmk-battery-center/issues/12) to track my battery usage.
+
+<img width="1408" height="677" alt="image" src="https://github.com/user-attachments/assets/65db5dfa-36b8-4236-809b-72f689e2643b" />
+
 
 #### 5.1.3 Power curve
 
