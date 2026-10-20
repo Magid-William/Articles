@@ -56,17 +56,14 @@ The TrackPoint natively speaks PS/2, There are three ways to get around that, fr
 
 All three power the same ZMK features above. Pick your approach below.
 
-> [!NOTE]
-> **But** the co-processor approach has the highest battery cost of the three, see [5.2 The co-processor approach](#52-the-co-processor-approach).
-
 ## 4. Step 1: Getting the TrackPoint out
 
-Regardless of approach, you first need to free the TrackPoint sensor from its USB housing.
+Regardless of approach,  sensor from its USB housing.
 
 The USB TrackPoint consists of 2 parts:
 
 - The TrackPoint sensor (the smaller PCB that houses the sensor with the red cap)
-- A housing PCB that exposes the TrackPoint as USB
+- A outter PCB that exposes the TrackPoint as USB
 
 We only need the TrackPoint sensor, so we'll de-solder it.
 
@@ -121,9 +118,8 @@ Each approach below has its own wiring, flashing, ZMK steps, and known issues.
 
 The simplest approach: wire the TrackPoint's PS/2 lines directly to the nicenano and decode them right on the chip running ZMK, no co-processor.
 
-This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp77) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config that is specific to this type of TrackPoint.
-
-This effort is built on `infused-kim`/`badjeff`'s work; stays compatible with it, and adds extra opt-in features (see the table below).
+This uses the [`zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp80) (a fork of `badjeff`'s PS/2 driver, which is itself a fork of `infused-kim`'s) plus the [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) bench config that is specific to this type of TrackPoint.
+Here's [my personal shell](https://github.com/Magid-William/zmk-config-dabaseV_0-2/tree/Exp80) that i'm testing it daily.
 
 #### 5.1.1 Wiring
 
@@ -143,9 +139,10 @@ This effort is built on `infused-kim`/`badjeff`'s work; stays compatible with it
 
 This particular TrackPoint streams 3-byte PS/2 packets on power-up and **rejects every host command**, so the driver runs in a *never-send-commands* mode and just listens. Wire it directly to the nice_nano
 
-The [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) shield is configured it wires up the [driver](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp77) and enables everything needed, use it for sanity.
+The [`zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test) shield is configured it wires up the [driver](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp80) and enables everything needed, use it for sanity, but here's [my personal shell](https://github.com/Magid-William/zmk-config-dabaseV_0-2/tree/Exp80) that was tested daily.
 
-The key flags for this module:
+
+This effort is built on `infused-kim`/`badjeff`'s work; stays compatible with it, and adds extra opt-in features (see the table below):
 
 | Option | What it does for this TrackPoint |
 |--------|----------------------------|
@@ -156,6 +153,19 @@ The key flags for this module:
 | `POWER_CURVE` | on-device Smoothness curve, see below |
 
 Also note the **axis are rotated** for my specific hardware orientation, to change them transform (`zmk,input-processor-transform`, `INPUT_TRANSFORM_XY_SWAP`).
+mine look like this:
+```
+  ┌──────────────────────────┐
+  ├─┐        │               │
+  ├─┤        │       up      │
+  ├─┤        │    ┌───────┐  │
+  ├─┤        │left│       │right
+  ├─┤        │    │       │  │
+  ├─┤        │    └───────┘  │
+  ├─┤        │      down     │
+  ├─┘        │               │
+  └──────────────────────────┘
+```
 
 #### 5.1.3 Power curve
 
@@ -173,12 +183,15 @@ tpoint0 {
 #### 5.1.4 Known issues
 
 **Issue 1:**  
-One unique quirk with this approach with this specific TP module is that PS/2 over GPIO interrupts is fragile by design. The nRF samples DAT on every CLK falling edge (~14k edges/s), and a single delayed edge under load (BLE/USB/workqueue) = one bad bit = a frame that still squeaks past PS/2's weak parity + stop-bit check = one bogus full-scale delta = a random cursor jump. It's the exact failure mode infused-kim [documents](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#i-realized-the-microcontroller-was-too-slow-for-the-trackpoint-:~:text=This%20meant%20that%20my%20driver%20wasn%27t%20able%20to%20%22catch%22%20all%20of%20the%20bits%20the%20TrackPoint%20was%20sending.) as the reason he built the UART-trick as a hardware offload, using the UART-trick is still under investigation.
+One unique quirk with this approach with this specific TP module is that PS/2 over GPIO interrupts is fragile by design. The nRF samples DAT on every CLK falling edge (~14k edges/s), and a single delayed edge under load (BLE/USB/workqueue) = one bad bit = a frame that still squeaks past PS/2's weak parity + stop-bit check = one bogus full-scale delta. It's the exact failure mode infused-kim [documents](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#i-realized-the-microcontroller-was-too-slow-for-the-trackpoint-:~:text=This%20meant%20that%20my%20driver%20wasn%27t%20able%20to%20%22catch%22%20all%20of%20the%20bits%20the%20TrackPoint%20was%20sending.) as the reason he built the UART-trick as a hardware offload, using the UART-trick is still under investigation.
 
 Update 2026-09-04:  
 I had no luck using UART on 9600, 14400 and 19200 rate, this means GPIO is the only viable driver for this TP module.
 
-I "can" live with the GPIO performance, but i might move to the coprocessor approach, or even the ADC approach both had/will-have clean movement than the GPIO
+Update 2026-10-20:
+There used to be a random mouse jitter and crazy movement are gone now, the PS/2 driver now notices a dropped byte and resyncs the 3-byte packet instead of stitching it together with the next packet's bytes, make sure you are using [Exp80 branch of the driver](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp80).
+
+I can live with the GPIO performance, but i might move to the coprocessor approach, or even the ADC approach both had/will-have clean movement than the GPIO
 
 <details>
 
@@ -208,6 +221,8 @@ Check my attempts here
 |---|---|
 | [**Exp70**](https://github.com/Magid-William/trackpoint-knowledge/blob/main/experiments/Exp70/Exp70.md) | `LOG_BACKEND_UART=y` + dropping `LOG_PRINTK` = why logs were invisible; also adaptive DTR/RTS shell probing over USB CDC. |
 
+| [Exp80](experiments/Exp80/Exp80.md) | **Success** | Random cursor jumps are partial PS/2 packets completed by the next packet after a byte loss. In `NO_RESEND` mode `ps2_gpio` suppresses the `0xFE` **and** the resend callback, so the 3-byte assembler is never told; the next packet fills the hole and a plausible bogus packet moves the cursor. Fix: ordered byte/error queue + read-error callback into the input driver, which drops the partial packet and holds movement until three packet starts 3 bytes apart confirm alignment. Right-half USB logging restored to capture drops. | Driver `3ac4d1d` |
+
 </details>
 
 **Issue2:**  
@@ -224,8 +239,9 @@ These also point to possible causes:
 
 #### 5.1.5 Resources
 
-- [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp77)
-- [Config: `zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test)
+- [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp80)
+- [Test Config: `zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test)
+- [My personal config](https://github.com/Magid-William/zmk-config-dabaseV_0-2/tree/Exp80)
 
 ---
 
@@ -235,9 +251,7 @@ These also point to possible causes:
 > **Battery cost:** the co-processor approach uses **~3x the battery** of the [software-only approach](#51-the-software-only-approach), the AVR draws mA whenever the keyboard is on. In my measurements that was 3–4% per day (Pro Mini + TrackPoint) vs 1% per day software-only on the same battery, see [5.2.2](#522-arduino-pro-mini).
 
 **Why?**  
-The software only would have been my only choice, It has 2 approaches the first GPIO (the one that worked with this TP), and the much better UART (the one that didn't work for this TP).  
-The GPIO performance has this weird hiccups every now and then, it's very pronounced when you really don't want it to happen, like pressing `Ok`; the hiccup happens and you'd press `Cancel`.  
-[@infusedkim did talk about it](https://github.com/infused-kim/kb_zmk_ps2_mouse_trackpoint_driver#341-choose-the-ps2-driver-uart-vs-gpio) this TP is basically unlucky in this regard.
+Exposing an I2C instead handling PS/2 is cleaner, with no packets dropping, so it feels natural only if you have a spare MCU and you are okay with the battery life tradeoff.
 
 Therefore this approach was approachable to me, I already had the hardware parts and it's performance was really good.
 
