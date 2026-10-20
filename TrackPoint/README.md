@@ -241,7 +241,7 @@ These also point to possible causes:
 
 - [Driver: `zmk-ps2-trackpoint-driver`](https://github.com/Magid-William/zmk-ps2-trackpoint-driver/tree/Exp80)
 - [Test Config: `zmk-config-ps2-test`](https://github.com/Magid-William/zmk-config-ps2-test)
-- [My personal config](https://github.com/Magid-William/zmk-config-dabaseV_0-2/tree/Exp80)
+- [My personal config `zmk-config-dabaseV_0-2`](https://github.com/Magid-William/zmk-config-dabaseV_0-2/tree/Exp80)
 
 ---
 
@@ -251,7 +251,7 @@ These also point to possible causes:
 > **Battery cost:** the co-processor approach uses **~3x the battery** of the [software-only approach](#51-the-software-only-approach), the AVR draws mA whenever the keyboard is on. In my measurements that was 3–4% per day (Pro Mini + TrackPoint) vs 1% per day software-only on the same battery, see [5.2.2](#522-arduino-pro-mini).
 
 **Why?**  
-Exposing an I2C instead handling PS/2 is cleaner, with no packets dropping, so it feels natural only if you have a spare MCU and you are okay with the battery life tradeoff.
+Exposing an I2C instead handling PS/2 is cleaner, with no packets dropping, so it feels natural only if you have a spare MCU and you are okay with the battery life tradeoff (which is not that huge compared to the software only approach).
 
 Therefore this approach was approachable to me, I already had the hardware parts and it's performance was really good.
 
