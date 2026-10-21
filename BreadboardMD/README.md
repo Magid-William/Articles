@@ -222,7 +222,8 @@ Read Table 1 as a breadboard; Table 2 lists parts.
 - each +/- rail is one continuous net per side, left/right separate; 
 - blank rail cell = missing hole, not a break. 
 - One lead per cell. 
-- Answer or rewire, then return both full tables **in the same format**. 
+- Answer or rewire, then return both full tables **in the same format**.
+- The most important step is to keep the table **proportional** and neat in edit mode, so each column has the same numbers of chars (use common the denominator), treat it like a TUI.
 
 Table 1: 
 - every line is 5*columns+1 chars; 
