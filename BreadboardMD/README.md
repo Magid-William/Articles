@@ -226,6 +226,21 @@ Components & wiring
 ```
 </details>
 
+<details>
+  
+  <summary>
+    Useful symbols
+  </summary>
+  
+`┌` `─` `┐` ` ` `╔` `═` `╗`  
+`│` ` ` `│` ` ` `║` ` ` `║`  
+`└` `─` `┘` ` ` `╚` `═` `╝`  
+` ` `┬` ` ` ` ` ` ` `╦` ` `  
+`├` `┼` `┤` ` ` `╠` `╬` `╣`  
+` ` `┴` ` ` ` ` ` ` `╩` ` `   
+</details>
+
+
 ## Usage example (first 9 rows shown):
 
 | #  | +  | -  | A  | B  | C  | D  | E  |----| F  | G  | H  | I  | J  | +  | -  |
