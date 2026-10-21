@@ -1,7 +1,7 @@
 <img width="1376" height="768" alt="Gemini_Generated_Image_546m3g546m3g546m" src="https://github.com/user-attachments/assets/78d866cf-8bf9-4487-9cf0-7f342ad9a101" />
 
 The following is a small hacky way to communicate breadboard wiring with LLMs.
-For serious work that is beyond the breadboard, see [netlist](https://en.wikipedia.org/wiki/Netlist) as it's the right tool.
+For serious work that is beyond the breadboard, see [netlist](https://en.wikipedia.org/wiki/Netlist) as it's the right tool [[^]](https://x.com/M_Decoherence/status/2112157758489260167).
 
 ## Motivation  
 
