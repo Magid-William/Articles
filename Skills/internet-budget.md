@@ -5,7 +5,7 @@ description: Use before any action that downloads data over the network: package
 
 # Internet budget
 
-The connection is metered: 150 GB per recharge, ~20 GB/day typical use, so a recharge lasts only ~7–8 days. Every extra GB shortens it. Never assume unlimited bandwidth.
+The current internet connection is metered: 150 GB per recharge, ~20 GB/day typical use, so a recharge lasts only ~7–8 days. Every extra GB shortens it. Never assume unlimited bandwidth.
 
 ## Before downloading
 
