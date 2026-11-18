@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi-application-specific-configuration/master/schema.json",
+  "_comment": [
+    "Fragment, not a whole applications.json. Merge the 'Google Chrome' entry into your existing",
+    "%USERPROFILE%\\applications.json - komorebi's stock file already has a Google Chrome entry with",
+    "tray_and_multi_window; add ignore_rules to it.",
+    "",
+    "Effect: Chrome's picture-in-picture window is not managed by komorebi, so it is never hidden when",
+    "you switch workspaces - the same result as Omarchy's 'popped window' (Super+O).",
+    "",
+    "Rules only apply to windows created after they exist: close the current PiP and reopen it once.",
+    "Chrome's PiP window shares the class Chrome_WidgetWin_1 with normal Chrome windows, so the rule",
+    "has to match the title."
+  ],
+  "Google Chrome": {
+    "tray_and_multi_window": [
+      {
+        "kind": "Exe",
+        "id": "chrome.exe",
+        "matching_strategy": "Equals"
+      }
+    ],
+    "ignore_rules": [
+      {
+        "kind": "Title",
+        "id": "Picture in picture",
+        "matching_strategy": "Equals"
+      }
+    ]
+  }
+}
